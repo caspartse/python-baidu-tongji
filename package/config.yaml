@@ -1,0 +1,6 @@
+%YAML 1.2
+---
+# https://tongji.baidu.com/api/manual/Chapter2/openapi.html
+api_key: XXXXXXXX
+secret_key: XXXXXXXX
+auth_code: XXXXXXXX
