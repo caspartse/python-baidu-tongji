@@ -106,7 +106,7 @@ def queryDivision(name: str, ip: str='') -> tuple:
                     'accessKey': 'alibaba-inc'
                 }
                 try:
-                    resp = requests.get(url, params=params, timeout=5)
+                    resp = requests.get(url, params=params, timeout=(10, 30))
                     content = resp.json()
                     data = content['data']
                     country = data['country']

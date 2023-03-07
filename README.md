@@ -155,11 +155,24 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 
 ## Demo 介绍
-Demo 使用了 `baidu_tongji.py` 获取的数据，并存储到 PostgreSQL 数据库中。
+
+### PostgreSQL
+
+使用 `baidu_tongji.py` 获取的数据，并存储到 PostgreSQL 数据库中。
 
 0. 创建一个名为 `website_traffic` 的数据库。
 1. 执行 `DDL_website_traffic.sql` 创建表结构。
 2. 运行 `main.py` 即可。
+
+![PostgreSQL](demo/PostgreSQL/Screenshot.png)
+
+### Elasticsearch
+
+使用 `baidu_tongji.py` 获取的数据，并存储到 Elasticsearch 中。
+
+0. 修改 `main.py` 中的账号密码，运行即可。
+
+![Elasticsearch](demo/Elasticsearch/Screenshot.png)
 
 
 ## 软件要求
@@ -167,6 +180,7 @@ Demo 使用了 `baidu_tongji.py` 获取的数据，并存储到 PostgreSQL 数�
 - Redis
 - MongoDB (可选，用于存储过程数据)
 - PostgreSQL (可选，用于 Demo)
+- Elasticsearch、Kibana (可选，用于 Demo)
 
 
 ## 参考资料
@@ -176,7 +190,7 @@ Demo 使用了 `baidu_tongji.py` 获取的数据，并存储到 PostgreSQL 数�
 
 
 ## TODO
-- [ ] Elasticsearch Demo
+- [ ] 实现基于访客数据的常用指标
 
 
 ## Thanks

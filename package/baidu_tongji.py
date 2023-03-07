@@ -113,7 +113,7 @@ class baiduTongji(object):
                 'queryId': '',
                 'visitorId': visitor_id
             }
-            resp = self.sess.post(url, data=data)
+            resp = self.sess.post(url, data=data, timeout=(10, 30))
             content = resp.json()
             items = content['data']['items']
         else:
@@ -127,7 +127,7 @@ class baiduTongji(object):
                 'max_results': page_size, # max allowed is 1000
                 'visitorId': visitor_id
             }
-            resp = self.sess.get(url, params=params)
+            resp = self.sess.get(url, params=params, timeout=(10, 30))
             content = resp.json()
             items = content['result']['items']
 

@@ -9,10 +9,10 @@ from baidu_tongji import baiduTongji
 import psycopg2
 
 
-host = 'localhost'
+host = 'localhost' # Change this to your own host
 dbName = 'website_traffic'
-dbUser = 'postgres'
-dbPwd = '123456'
+dbUser = 'postgres' # Change this to your own user
+dbPwd = '123456' # Change this to your own password
 conn = psycopg2.connect(host=host, dbname=dbName, user=dbUser, password=dbPwd)
 cur = conn.cursor()
 
