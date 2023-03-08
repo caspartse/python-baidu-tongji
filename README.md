@@ -13,7 +13,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 - 更精细的流量来源划分，包括站内来源等
 - 一级路径、完整路径、参数拆分，支持子目录分析
 - utm / hm 参数解析，支持指定广告跟踪
-- 支持跨会话的用户访问轨迹细查
+- 支持跨会话的访客访问轨迹细查
 - 支持访客来源归因
 
 ![Screenshot.png](Screenshot.png)
@@ -58,7 +58,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 
 ## 参考资料
-- [百度统计 Tongji API 用户首次](https://tongji.baidu.com/api/manual/)
+- [百度统计 Tongji API 用户手册](https://tongji.baidu.com/api/manual/)
 - [百度统计产品使用指南](https://tongji.baidu.com/holmes/Analytics/%E4%BA%A7%E5%93%81%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/%E6%A6%82%E8%A7%88/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/%E5%AE%9E%E6%97%B6%E8%AE%BF%E5%AE%A2/)
 - [神策分析帮助文档](https://manual.sensorsdata.cn/sa/latest/tech_sdk_all_preset_properties-89620676.html)
 
