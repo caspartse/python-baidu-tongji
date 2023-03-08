@@ -7,6 +7,15 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 利用百度统计API，获取网站实时访客数据，解析并构建 Visitor 、Session 、Event 三个对象，方便后续数据分析。
 
+### 亮点功能
+- Token 生成、自动刷新
+- 更精确的访客区域信息（国家、省份、城市）
+- 更精细的流量来源划分，包括站内来源等
+- 一级路径、完整路径、参数拆分，支持子目录分析
+- utm / hm 参数解析，支持指定广告跟踪
+- 支持跨会话的用户访问轨迹细查
+- 支持访客来源归因
+
 ![Screenshot.png](Screenshot.png)
 
 
