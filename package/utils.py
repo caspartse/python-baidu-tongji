@@ -47,13 +47,23 @@ def saveTokenInfo(token_info) -> bool:
             )
     return True
 
-def saveRawData(site_id: str, items: dict) -> None:
-    log = {
-        'site_id': site_id,
-        'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
-        'items': items
-    }
+def saveRawData(site_id: str, content: dict) -> None:
+    print(content)
+    ## save raw data as json file
     try:
+        import codecs
+        with codecs.open(f'{CURRENT_PATH}/raw_data.json', 'w', 'utf-8') as f:
+            f.write(json.dumps(content, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
+    except Exception as e:
+        print(e)
+        pass
+
+    ## save raw data to mongodb
+        log = {
+            'site_id': site_id,
+            'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
+            'items': content.get('data', content.get('result'))['items']
+        }
         client = MongoClient('mongodb://localhost:27017/')
         db = client['website_traffic']
         collection = db['log']

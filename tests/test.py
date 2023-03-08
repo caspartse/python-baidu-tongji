@@ -14,7 +14,10 @@ CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 if __name__ == '__main__':
-    os.remove(f'{CURRENT_PATH}/result.json')
+    try:
+        os.remove(f'{CURRENT_PATH}/result.json')
+    except:
+        pass
     bd = baiduTongji(debug=True)
     result = bd.fetchRealTimeData('16847648', page_size=10)
     with codecs.open(f'{CURRENT_PATH}/result.json', 'w', 'utf-8') as f:

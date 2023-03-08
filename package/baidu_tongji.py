@@ -131,7 +131,7 @@ class baiduTongji(object):
             content = resp.json()
             items = content['result']['items']
 
-        saveRawData(site_id, items)
+        saveRawData(site_id, content)
 
         outline = items[1]
         detail = items[0]
