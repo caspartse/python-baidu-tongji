@@ -32,11 +32,10 @@ def getTableColumns(table_name: str) -> dict:
 
 def saveToDB(entity: dict) -> bool:
     ## insert or update visitors
-    data= entity['visitor']
+    data = entity['visitor']
     table_name = 'visitors'
     primary_key = 'visitor_id'
     template = getTableColumns(table_name)
-    template = getTableColumns('visitors')
     obj = {k: v for k, v in data.items() if k in template.keys()}
     try:
         q = f'''
@@ -109,12 +108,14 @@ if __name__ == '__main__':
     bd = baiduTongji(debug=True)
 
     ## query by visitor_id which has negative event_duration
+    ## you can change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
         WHERE event_duration < 0
         GROUP BY visitor_id
-        ORDER BY min_receive_time
+        ORDER BY min_receive_time DESC
+        LIMIT 100;
     '''
     cur.execute(q)
     rows = cur.fetchall()
@@ -123,7 +124,7 @@ if __name__ == '__main__':
         print(f'query visitor - {idx+1}/{l}')
         visitor_id = row[0]
         try:
-            result = bd.fetchRealTimeData('16847648', page_size=10, visitor_id=visitor_id)
+            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id)
         except:
             traceback.print_exc()
             continue
@@ -154,8 +155,7 @@ if __name__ == '__main__':
             )
             GROUP BY session_id
         ) t1
-        WHERE t2.session_id = t1.session_id
-        ;
+        WHERE t2.session_id = t1.session_id;
     '''
     cur.execute(q)
     conn.commit()

@@ -34,7 +34,7 @@ class Kibana(object):
         result = resp.json()
         return result
 
-    def insertDocument(self, index_name, doc_id, data):
+    def insertDocument(self, index_name: str, doc_id: str, data: dict) -> dict:
         params = {
             'path': f'/{index_name}/_doc/{doc_id}',
             'method': 'POST'
@@ -46,7 +46,7 @@ class Kibana(object):
             traceback.print_exc()
         return result
 
-    def updateDocument(self,index_name, doc_id, data):
+    def updateDocument(self,index_name: str, doc_id: str, data: dict) -> dict:
         params = {
             'path': f'/{index_name}/_update/{doc_id}',
             'method': 'POST'
@@ -60,6 +60,56 @@ class Kibana(object):
         except:
             traceback.print_exc()
         return result
+
+    def sqlQuery(self, query: str) -> dict:
+        params = {
+            'path': '/_sql?format=json',
+            'method': 'POST'
+        }
+        data = {
+            'query': query
+        }
+        resp = self.sess.post(self.url, params=params, json=data)
+        result = resp.json()
+        return result
+
+def saveToES(self, entity: dict) -> bool:
+
+    ## insert or update visitors
+    data = entity['visitor']
+    index_name = 'visitors'
+    doc_id = data['visitor_id']
+    try:
+        result = self.insertDocument(index_name, doc_id, data)
+        print(result)
+    except:
+        traceback.print_exc()
+        print('insert or update visitors')
+
+    ## insert or update sessions
+    data = entity['session']
+    index_name = 'sessions'
+    doc_id = data['session_id']
+    try:
+        result = self.insertDocument(index_name, doc_id, data)
+        print(result)
+    except:
+        traceback.print_exc()
+        print('insert or update sessions')
+
+    ## insert or update events
+    event_list = entity['event_list']
+    index_name = 'events'
+    for event in event_list:
+        doc_id = event['event_id']
+        try:
+            result = self.insertDocument(index_name, doc_id, event)
+            print(result)
+        except:
+            traceback.print_exc()
+            print('insert or update events')
+
+    return True
 
 
 if __name__ == '__main__':
@@ -79,34 +129,35 @@ if __name__ == '__main__':
 
     bd = baiduTongji(debug=True)
 
+    ## query by visitor_id which has negative event_duration
+    ## you can change the order by condition to get the latest data, or change the limit to get more data
+    query = '''
+        SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
+        FROM events
+        WHERE event_duration < 0
+        GROUP BY visitor_id, event_id
+        ORDER BY min_receive_time DESC
+        LIMIT 100
+    '''
+    content = kb.sqlQuery(query)
+    rows = content['rows']
+    l = len(rows)
+    for idx, row in enumerate(rows):
+        print(f'query visitor - {idx+1}/{l}')
+        visitor_id = row[0]
+        try:
+            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id)
+        except:
+            traceback.print_exc()
+            continue
+        for item in result:
+            print(item)
+            saveToES(kb, item)
+
     ## fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=1000)
+    result = bd.fetchRealTimeData('16847648', page_size=100)
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')
-
-        # ## insert visitors
-        print('insert visitors')
-        index_name = 'visitors'
-        data = item['visitor']
-        doc_id = data['visitor_id']
-        resp = kb.insertDocument(index_name, doc_id, data)
-        print(resp)
-
-        # ## insert sessions
-        print('insert sessions')
-        index_name = 'sessions'
-        data = item['session']
-        doc_id = data['session_id']
-        resp = kb.insertDocument(index_name, doc_id, data)
-        print(resp)
-
-        ## insert events
-        print('insert events')
-        index_name = 'events'
-        event_list = item['event_list']
-        for data in event_list:
-            doc_id = data['event_id']
-            print(data)
-            resp = kb.insertDocument(index_name, doc_id, data)
-            print(resp)
+        print(item)
+        saveToES(kb, item)
