@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import os
-import traceback
-import arrow
-import yaml
+import re
 import sqlite3
-import requests
+import traceback
+from urllib.parse import parse_qs, unquote_plus, urlparse
+
+import arrow
 import orjson
 import orjson as json
-import re
-from urllib.parse import urlparse, parse_qs, unquote_plus
+import redis
+import requests
+import yaml
+
 try:
     from pymongo import MongoClient
 except:
     pass
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+rd_pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True) # Change this to your own redis settings
+rd = redis.Redis(connection_pool=rd_pool)
+mongodb_uri = 'mongodb://localhost:27017/' # Change this to your own MongoDB URI
 
 
 def loadConfig() -> dict:
@@ -63,7 +69,7 @@ def saveRawData(site_id: str, content: dict) -> None:
             'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
             'items': content.get('data', content.get('result'))['items']
         }
-        client = MongoClient('mongodb://localhost:27017/')
+        client = MongoClient(mongodb_uri)
         db = client['website_traffic']
         collection = db['log']
         if isinstance(log, list):

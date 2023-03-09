@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-from utils import *
 from hashlib import md5
-import redis
 
-
-rd_pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
-rd = redis.Redis(connection_pool=rd_pool)
+from utils import *
 
 
 class baiduTongji(object):

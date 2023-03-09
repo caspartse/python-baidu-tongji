@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import os, sys
-from os.path import dirname, join, abspath
+import os
+import sys
+from os.path import abspath, dirname, join
+
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
 import traceback
-from baidu_tongji import baiduTongji
+
 import psycopg2
+from baidu_tongji import baiduTongji
 
-
-host = 'localhost' # Change this to your own host
-dbName = 'website_traffic'
-dbUser = 'postgres' # Change this to your own user
-dbPwd = '123456' # Change this to your own password
-conn = psycopg2.connect(host=host, dbname=dbName, user=dbUser, password=dbPwd)
+conn = psycopg2.connect(host='localhost', port='5432', dbname='website_traffic', user='postgres', password='123456') # Change this to your own PostgreSQL settings
 cur = conn.cursor()
 
 

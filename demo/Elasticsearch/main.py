@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import os, sys
-from os.path import dirname, join, abspath
+import os
+import sys
+from os.path import abspath, dirname, join
+
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
-import traceback
 import codecs
-import requests
-import orjson as json
-from baidu_tongji import baiduTongji
+import traceback
+
 import arrow
+import orjson as json
+import requests
+from baidu_tongji import baiduTongji
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,7 +21,7 @@ CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 class Kibana(object):
     def __init__(self):
         super(Kibana, self).__init__()
-        self.url = 'http://localhost:5601/api/console/proxy'
+        self.url = 'http://localhost:5601/api/console/proxy' # Change this to your own Kibana host and port, maybe you need use https
         self.sess = requests.Session()
         self.sess.auth = requests.auth.HTTPBasicAuth('elastic', 'uOu7t890nmjqVTAPp5kE') # Change this to your own username and password of Kibana
         self.sess.headers.update({'kbn-xsrf': 'kibana'})
@@ -149,7 +152,7 @@ if __name__ == '__main__':
         WHERE event_duration < 0
         GROUP BY visitor_id, event_id
         ORDER BY min_receive_time DESC
-        LIMIT 10
+        LIMIT 10;
     '''
     content = kb.sqlQuery(query)
     rows = content.get('rows', [])
@@ -174,3 +177,5 @@ if __name__ == '__main__':
         print(f'fetch new data - {idx+1}/{l}')
         print(item)
         saveToES(kb, item)
+
+    print('done.')

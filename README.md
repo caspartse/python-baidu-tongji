@@ -70,4 +70,4 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 
 ## Thanks
-[GitHub Copilot](https://github.com/features/copilot), [vscode-chatgpt](https://github.com/gencay/vscode-chatgpt)
+[GitHub Copilot](https://github.com/features/copilot), [vscode-chatgpt](https://github.com/gencay/vscode-chatgpt), [Administrative-divisions-of-China](https://github.com/modood/Administrative-divisions-of-China)
