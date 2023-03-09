@@ -9,6 +9,7 @@ import codecs
 import requests
 import orjson as json
 from baidu_tongji import baiduTongji
+import arrow
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,6 +22,15 @@ class Kibana(object):
         self.sess = requests.Session()
         self.sess.auth = requests.auth.HTTPBasicAuth('elastic', 'uOu7t890nmjqVTAPp5kE') # Change this to your own username and password of Kibana
         self.sess.headers.update({'kbn-xsrf': 'kibana'})
+
+    def deleteIndex(self, index_name: str, mappings: dict) -> bool:
+        params = {
+            'path': f'/{index_name}',
+            'method': 'DELETE'
+        }
+        resp = self.sess.post(self.url, params=params)
+        result = resp.json()
+        return result
 
     def createIndex(self, index_name: str, mappings: dict) -> bool:
         params = {
@@ -73,41 +83,33 @@ class Kibana(object):
         result = resp.json()
         return result
 
+def changeToUTC(local_time: str, tzinfo: str = 'Asia/Shanghai') -> str:
+    try:
+        utc_time = arrow.get(local_time, tzinfo=tzinfo).to('UTC').format('YYYY-MM-DD HH:mm:ss')
+        return utc_time
+    except:
+        return local_time
+
 def saveToES(self, entity: dict) -> bool:
+    # index_name, doc_id, data
+    doc_lits = [
+        ('visitors', entity['visitor']['visitor_id'], entity['visitor']),
+        ('sessions', entity['session']['session_id'], entity['session']),
+    ]
+    doc_lits.extend([('events', event['event_id'], event) for event in entity['event_list']])
 
-    ## insert or update visitors
-    data = entity['visitor']
-    index_name = 'visitors'
-    doc_id = data['visitor_id']
-    try:
-        result = self.insertDocument(index_name, doc_id, data)
-        print(result)
-    except:
-        traceback.print_exc()
-        print('insert or update visitors')
-
-    ## insert or update sessions
-    data = entity['session']
-    index_name = 'sessions'
-    doc_id = data['session_id']
-    try:
-        result = self.insertDocument(index_name, doc_id, data)
-        print(result)
-    except:
-        traceback.print_exc()
-        print('insert or update sessions')
-
-    ## insert or update events
-    event_list = entity['event_list']
-    index_name = 'events'
-    for event in event_list:
-        doc_id = event['event_id']
+    # insert or update documents
+    for index_name, doc_id, data in doc_lits:
         try:
-            result = self.insertDocument(index_name, doc_id, event)
+            # change time zone from UTC+8 to UTC, because Elasticsearch is in UTC
+            for k, v in data.items():
+                if k in ['date_time', 'first_visit_time', 'latest_visit_time', 'receive_time', 'start_time']:
+                    data[k] = changeToUTC(v)
+            result = self.insertDocument(index_name, doc_id, data)
             print(result)
         except:
+            print(f'insert or update {index_name}')
             traceback.print_exc()
-            print('insert or update events')
 
     return True
 
@@ -115,7 +117,17 @@ def saveToES(self, entity: dict) -> bool:
 if __name__ == '__main__':
     kb = Kibana()
 
-    ## load mappings from json file and create index ('visitors', 'sessions', 'events')
+    # # delete index ('visitors', 'sessions', 'events')
+    # for index_name in ['visitors', 'sessions', 'events']:
+    #     try:
+    #         result = kb.deleteIndex(index_name, {})
+    #         print(result)
+    #     except:
+    #         traceback.print_exc()
+    #         continue
+
+    # # load mappings from json file and create index ('visitors', 'sessions', 'events')
+    # # uncomment the following code if you're trying this demo for the first time.
     # for index_name in ['visitors', 'sessions', 'events']:
     #     try:
     #         with codecs.open(f'{CURRENT_PATH}/mappings_{index_name}.json', encoding='utf-8') as f:
@@ -129,32 +141,33 @@ if __name__ == '__main__':
 
     bd = baiduTongji(debug=True)
 
-    ## query by visitor_id which has negative event_duration
-    ## you can change the order by condition to get the latest data, or change the limit to get more data
+    # query by visitor_id which has negative event_duration
+    # you can change the order by condition to get the latest data, or change the limit to get more data
     query = '''
         SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
         FROM events
         WHERE event_duration < 0
         GROUP BY visitor_id, event_id
         ORDER BY min_receive_time DESC
-        LIMIT 100
+        LIMIT 10
     '''
     content = kb.sqlQuery(query)
-    rows = content['rows']
-    l = len(rows)
-    for idx, row in enumerate(rows):
-        print(f'query visitor - {idx+1}/{l}')
-        visitor_id = row[0]
-        try:
-            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id)
-        except:
-            traceback.print_exc()
-            continue
-        for item in result:
-            print(item)
-            saveToES(kb, item)
+    rows = content.get('rows', [])
+    if rows:
+        l = len(rows)
+        for idx, row in enumerate(rows):
+            print(f'query visitor - {idx+1}/{l}')
+            visitor_id = row[0]
+            try:
+                result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id)
+            except:
+                traceback.print_exc()
+                continue
+            for item in result:
+                print(item)
+                saveToES(kb, item)
 
-    ## fetch new data
+    # fetch new data
     result = bd.fetchRealTimeData('16847648', page_size=100)
     l = len(result)
     for idx, item in enumerate(result):

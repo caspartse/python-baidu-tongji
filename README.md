@@ -8,6 +8,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 利用百度统计API，获取网站实时访客数据，解析并构建 Visitor 、Session 、Event 三个对象，方便后续数据分析。
 
 ### 亮点功能
+
 - Token 生成、自动刷新
 - 更精确的访客区域信息（国家、省份、城市）
 - 更精细的流量来源划分，包括站内来源等
@@ -17,6 +18,15 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 - 支持访客来源归因
 
 ![Screenshot.png](Screenshot.png)
+
+
+## 软件要求
+
+- SQLite
+- Redis
+- MongoDB (可选，用于存储过程数据)
+- PostgreSQL (可选，用于 Demo)
+- Elasticsearch、Kibana (可选，用于 Demo)
 
 
 ## 使用方法
@@ -36,7 +46,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 0. 创建一个名为 `website_traffic` 的数据库。
 1. 执行 `DDL_website_traffic.sql` 创建表结构。
-2. 运行 `main.py` 即可。
+2. 修改 `main.py` 中的数据库信息，运行即可。
 
 ![PostgreSQL](demo/PostgreSQL/Screenshot.png)
 
@@ -44,17 +54,9 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 使用 `baidu_tongji.py` 获取的数据，并存储到 Elasticsearch 中。
 
-0. 修改 `main.py` 中的账号密码，运行即可。
+1. 修改 `main.py` 中的账号密码，运行即可。（首次运行，建议先创建索引，详见代码注释。）
 
 ![Elasticsearch](demo/Elasticsearch/Screenshot.png)
-
-
-## 软件要求
-- SQLite
-- Redis
-- MongoDB (可选，用于存储过程数据)
-- PostgreSQL (可选，用于 Demo)
-- Elasticsearch、Kibana (可选，用于 Demo)
 
 
 ## 参考资料

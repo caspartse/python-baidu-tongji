@@ -31,52 +31,16 @@ def getTableColumns(table_name: str) -> dict:
     return template
 
 def saveToDB(entity: dict) -> bool:
-    ## insert or update visitors
-    data = entity['visitor']
-    table_name = 'visitors'
-    primary_key = 'visitor_id'
-    template = getTableColumns(table_name)
-    obj = {k: v for k, v in data.items() if k in template.keys()}
-    try:
-        q = f'''
-            INSERT INTO {table_name} ({','.join(obj.keys())})
-            VALUES ({','.join(['%s'] * len(obj))})
-            ON CONFLICT ({primary_key}) DO UPDATE
-            SET {','.join(['{}=EXCLUDED.{}'.format(k, k) for k in obj.keys()])}
-        '''
-        cur.execute(q, tuple(obj.values()))
-        conn.commit()
-    except:
-        print('insert or update visitors')
-        traceback.print_exc()
-        conn.rollback()
+    # table_name, primary_key, data
+    record_list = [
+        ('visitors', 'visitor_id', entity['visitor']),
+        ('sessions', 'session_id', entity['session'])
+    ]
+    record_list.extend([('events', 'event_id', x) for x in entity['event_list']])
 
-    ## insert or update sessions
-    data = entity['session']
-    table_name = 'sessions'
-    primary_key = 'session_id'
-    template = getTableColumns(table_name)
-    obj = {k: v for k, v in data.items() if k in template.keys()}
-    try:
-        q = f'''
-            INSERT INTO {table_name} ({','.join(obj.keys())})
-            VALUES ({','.join(['%s'] * len(obj))})
-            ON CONFLICT ({primary_key}) DO UPDATE
-            SET {','.join(['{}=EXCLUDED.{}'.format(k, k) for k in obj.keys()])}
-        '''
-        cur.execute(q, tuple(obj.values()))
-        conn.commit()
-    except:
-        print('insert or update sessions')
-        traceback.print_exc()
-        conn.rollback()
-
-    ## insert or update events
-    event_list = entity['event_list']
-    table_name = 'events'
-    primary_key = 'event_id'
-    template = getTableColumns(table_name)
-    for data in event_list:
+    # insert or update records
+    for table_name, primary_key, data in record_list:
+        template = getTableColumns(table_name)
         obj = {k: v for k, v in data.items() if k in template.keys()}
         try:
             q = f'''
@@ -88,15 +52,13 @@ def saveToDB(entity: dict) -> bool:
             cur.execute(q, tuple(obj.values()))
             conn.commit()
         except:
-            print('insert or update events')
+            print(f'insert or update {table_name}')
             traceback.print_exc()
             conn.rollback()
 
-    return True
-
 
 if __name__ == '__main__':
-    ## truncate tables
+    # # truncate tables
     # q = '''
     #     TRUNCATE TABLE visitors CASCADE;
     #     TRUNCATE TABLE sessions CASCADE;
@@ -107,15 +69,15 @@ if __name__ == '__main__':
 
     bd = baiduTongji(debug=True)
 
-    ## query by visitor_id which has negative event_duration
-    ## you can change the order by condition to get the latest data, or change the limit to get more data
+    # query by visitor_id which has negative event_duration
+    # you can change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
         WHERE event_duration < 0
         GROUP BY visitor_id
         ORDER BY min_receive_time DESC
-        LIMIT 100;
+        LIMIT 10;
     '''
     cur.execute(q)
     rows = cur.fetchall()
@@ -132,7 +94,7 @@ if __name__ == '__main__':
             print(item)
             saveToDB(item)
 
-    ## fetch new data
+    # fetch new data
     result = bd.fetchRealTimeData('16847648', page_size=100)
     l = len(result)
     for idx, item in enumerate(result):
@@ -140,7 +102,7 @@ if __name__ == '__main__':
         print(item)
         saveToDB(item)
 
-    ## update sessions duration which is negative
+    # update sessions duration which is negative
     q = '''
         UPDATE sessions t2
         SET duration = t1.total_duration

@@ -141,10 +141,12 @@ class baiduTongji(object):
             o = outline[i]
             d = detail[i][0]['detail']
 
-            ## session info
+            """
+            session info
+            """
             start_time, area, source, access_page, search_word, ip, visitor_id, duration, visit_pages = o
 
-            start_time, date_time, unix_timestamp = getTime(start_time)
+            start_time, date_time, unix_timestamp= getTime(start_time)
             country, province, city = queryDivision(area, ip)
 
             if access_page != d['accessPage']:
@@ -291,7 +293,9 @@ class baiduTongji(object):
              }
 
 
-            ## visitor info
+            """
+            visitor info
+            """
             if visitor_type == 0:
                 first_visit_time = start_time
                 utm_source = utm_source
@@ -339,7 +343,9 @@ class baiduTongji(object):
             }
 
 
-            ## pageview info
+            """
+            pageview info
+            """
             latest_channel_id = channel_id
             latest_landing_page = landing_page
             latest_referrer = referrer
@@ -363,7 +369,7 @@ class baiduTongji(object):
                     referrer_host = urlparse(referrer).netloc
                     is_first_time = False
 
-                receive_time, date_time, unix_timestamp = getTime(start_time)
+                receive_time, date_time, unix_timestamp= getTime(start_time)
                 event_duration = getDuration(duration)
                 url_host = urlparse(url).netloc
                 traffic_source_type = '站内来源' if url_host == referrer_host else traffic_source_type

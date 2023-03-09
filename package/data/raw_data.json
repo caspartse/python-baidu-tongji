@@ -1,0 +1,571 @@
+{
+  "data": {
+    "fields": [
+      "null",
+      "start_time",
+      "area",
+      "source",
+      "access_page",
+      "searchword",
+      "ip",
+      "visitorId",
+      "visit_time",
+      "visit_pages"
+    ],
+    "items": [
+      [
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/optes",
+              "antiCode": "--",
+              "browser": "华为浏览器",
+              "browserType": "other",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "mobile",
+              "endPage": "https://demo.tongji.baidu.com/web/optes",
+              "flash": "",
+              "fromType": {
+                "fromType": "直接访问",
+                "tip": "",
+                "url": null
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "电信",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:40:25",
+              "os": "Android 10.0",
+              "osType": "android",
+              "paths": [
+                [
+                  "08:40:27",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/optes"
+                ]
+              ],
+              "resolution": "360x800",
+              "userId": "0",
+              "visitorFrequency": "5",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/optes",
+              "antiCode": "--",
+              "browser": "QQ手机浏览器",
+              "browserType": "other",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "mobile",
+              "endPage": "https://demo.tongji.baidu.com/web/optes",
+              "flash": "",
+              "fromType": {
+                "fromType": "搜狗(搜索词:-)",
+                "url": "https://demo.tongji.baidu.com/analytics/conversion/overview"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "华数数字电视有限公司",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/07 12:28:18",
+              "os": "Android 13.0",
+              "osType": "android",
+              "paths": [
+                [
+                  "08:40:25",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/optes"
+                ]
+              ],
+              "resolution": "360x800",
+              "userId": "0",
+              "visitorFrequency": "1",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/opt/updown",
+              "antiCode": "--",
+              "browser": "Google Chrome",
+              "browserType": "chrome",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "pc",
+              "endPage": "https://demo.tongji.baidu.com/web/visit/district",
+              "flash": "",
+              "fromType": {
+                "fromType": "百度(搜索词:网站统计工具)",
+                "url": "https://demo.tongji.baidu.com/web/trend/time"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:33:54",
+              "os": "Win 10",
+              "osType": "pc",
+              "paths": [
+                [
+                  "08:40:24",
+                  "3",
+                  "https://demo.tongji.baidu.com/web/opt/updown"
+                ],
+                [
+                  "08:40:27",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/visit/district"
+                ]
+              ],
+              "resolution": "1920x1080",
+              "userId": "0",
+              "visitorFrequency": "2",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/analytics/comprehension",
+              "antiCode": "--",
+              "browser": "Firefox",
+              "browserType": "firefox",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "pc",
+              "endPage": "https://demo.tongji.baidu.com/analytics/comprehension",
+              "flash": "",
+              "fromType": {
+                "fromType": "直接访问",
+                "tip": "",
+                "url": null
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:40:19",
+              "os": "Win 7",
+              "osType": "pc",
+              "paths": [
+                [
+                  "08:40:21",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/analytics/comprehension"
+                ]
+              ],
+              "resolution": "1920x1080",
+              "userId": "0",
+              "visitorFrequency": "1",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/optes",
+              "antiCode": "--",
+              "browser": "Google Chrome",
+              "browserType": "chrome",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "pc",
+              "endPage": "https://demo.tongji.baidu.com/web/optes",
+              "flash": "",
+              "fromType": {
+                "fromType": "直接访问",
+                "tip": "",
+                "url": null
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "移动",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 07:04:59",
+              "os": "Win 7",
+              "osType": "pc",
+              "paths": [
+                [
+                  "08:40:20",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/optes"
+                ]
+              ],
+              "resolution": "1920x1080",
+              "userId": "0",
+              "visitorFrequency": "3",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/visit/toppage",
+              "antiCode": "--",
+              "browser": "Google Chrome",
+              "browserType": "chrome",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "pc",
+              "endPage": "https://demo.tongji.baidu.com/web/visit/toppage",
+              "flash": "",
+              "fromType": {
+                "fromType": "https://demo.tongji.baidu.com/web/custom/visit",
+                "url": "https://demo.tongji.baidu.com/web/custom/visit"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "电信",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:40:19",
+              "os": "Win 10",
+              "osType": "pc",
+              "paths": [
+                [
+                  "08:40:20",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/visit/toppage"
+                ]
+              ],
+              "resolution": "1920x1080",
+              "userId": "0",
+              "visitorFrequency": "1",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/sc-web/home/user/info",
+              "antiCode": "--",
+              "browser": "手机百度",
+              "browserType": "other",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "mobile",
+              "endPage": "https://demo.tongji.baidu.com/sc-web/home/user/info",
+              "flash": "",
+              "fromType": {
+                "fromType": "百度(搜索词:网站流量统计分析)",
+                "url": "https://demo.tongji.baidu.com/analytics/cohort"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "移动",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:40:16",
+              "os": "Android",
+              "osType": "android",
+              "paths": [
+                [
+                  "08:40:16",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/sc-web/home/user/info"
+                ]
+              ],
+              "resolution": "360x640",
+              "userId": "0",
+              "visitorFrequency": "1",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/source/engine",
+              "antiCode": "--",
+              "browser": "搜狗高速",
+              "browserType": "sogou",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "pc",
+              "endPage": "https://demo.tongji.baidu.com/web/source/engine",
+              "flash": "",
+              "fromType": {
+                "fromType": "https://demo.tongji.baidu.com/ac-web/apps/list/my",
+                "url": "https://demo.tongji.baidu.com/ac-web/apps/list/my"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "电信",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:40:10",
+              "os": "Win 7",
+              "osType": "pc",
+              "paths": [
+                [
+                  "08:40:14",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/source/engine"
+                ]
+              ],
+              "resolution": "1920x1080",
+              "userId": "0",
+              "visitorFrequency": "1",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/web/optes",
+              "antiCode": "--",
+              "browser": "vivo浏览器",
+              "browserType": "vivo",
+              "color": "24-bit",
+              "cookie": "支持",
+              "deviceType": "mobile",
+              "endPage": "https://demo.tongji.baidu.com/web/opt/searchwordrank",
+              "flash": "",
+              "fromType": {
+                "fromType": "百度(搜索词:百度统计趋势分析报告推送邮件)",
+                "url": "https://demo.tongji.baidu.com/sc-web/home/trans/event/edit"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:14:06",
+              "os": "Android 13.0",
+              "osType": "android",
+              "paths": [
+                [
+                  "08:40:13",
+                  2,
+                  "https://demo.tongji.baidu.com/web/optes"
+                ],
+                [
+                  "08:40:15",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/web/opt/searchwordrank"
+                ]
+              ],
+              "resolution": "360x800",
+              "userId": "0",
+              "visitorFrequency": "4",
+              "visitorStatus": 0,
+              "visitorType": "老访客"
+            }
+          }
+        ],
+        [
+          {
+            "detail": {
+              "accessPage": "https://demo.tongji.baidu.com/ac-web/apps/list/my",
+              "antiCode": "--",
+              "browser": "手机百度",
+              "browserType": "other",
+              "color": "32-bit",
+              "cookie": "支持",
+              "deviceType": "mobile",
+              "endPage": "https://demo.tongji.baidu.com/ac-web/apps/list/my",
+              "flash": "",
+              "fromType": {
+                "fromType": "百度(搜索词:百度統計)",
+                "url": "https://demo.tongji.baidu.com/ac-web/advanced"
+              },
+              "from_word": "--",
+              "ipStatus": 0,
+              "isp": "联通",
+              "java": "不支持",
+              "language": "中文(简体)",
+              "lastVisitTime": "2023/03/09 08:30:51",
+              "os": "iOS 15.4",
+              "osType": "ios",
+              "paths": [
+                [
+                  "08:40:13",
+                  "正在访问",
+                  "https://demo.tongji.baidu.com/ac-web/apps/list/my"
+                ]
+              ],
+              "resolution": "",
+              "userId": "0",
+              "visitorFrequency": "4",
+              "visitorStatus": 0,
+              "visitorType": "新访客"
+            }
+          }
+        ]
+      ],
+      [
+        [
+          "2023/03/09 08:40:27",
+          "南京",
+          {
+            "fromType": "直接访问",
+            "tip": "",
+            "url": null
+          },
+          "https://demo.tongji.baidu.com/web/optes",
+          "--",
+          "180.111.26.234",
+          "2006554518135432281",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:25",
+          "其他",
+          {
+            "fromType": "搜狗",
+            "url": "https://demo.tongji.baidu.com/analytics/conversion/overview"
+          },
+          "https://demo.tongji.baidu.com/web/optes",
+          "--",
+          "113.214.182.214",
+          "5276429055320647479",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:24",
+          "桂林",
+          {
+            "fromType": "百度",
+            "url": "https://demo.tongji.baidu.com/web/trend/time"
+          },
+          "https://demo.tongji.baidu.com/web/opt/updown",
+          "网站统计工具",
+          "171.106.17.95",
+          "1829958541207719550",
+          3,
+          "2"
+        ],
+        [
+          "2023/03/09 08:40:21",
+          "上海",
+          {
+            "fromType": "直接访问",
+            "tip": "",
+            "url": null
+          },
+          "https://demo.tongji.baidu.com/analytics/comprehension",
+          "--",
+          "180.171.187.110",
+          "1895947599140669513",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:20",
+          "湖州",
+          {
+            "fromType": "直接访问",
+            "tip": "",
+            "url": null
+          },
+          "https://demo.tongji.baidu.com/web/optes",
+          "--",
+          "117.148.111.142",
+          "1906383352081363887",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:20",
+          "佛山",
+          {
+            "fromType": "https://demo.tongji.baidu.com/web/custom/visit",
+            "url": "https://demo.tongji.baidu.com/web/custom/visit"
+          },
+          "https://demo.tongji.baidu.com/web/visit/toppage",
+          "--",
+          "219.135.63.43",
+          "2274285144767714720",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:16",
+          "漳州",
+          {
+            "fromType": "百度",
+            "url": "https://demo.tongji.baidu.com/analytics/cohort"
+          },
+          "https://demo.tongji.baidu.com/sc-web/home/user/info",
+          "网站流量统计分析",
+          "183.252.78.114",
+          "1927400259261371534",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:14",
+          "无锡",
+          {
+            "fromType": "https://demo.tongji.baidu.com/ac-web/apps/list/my",
+            "url": "https://demo.tongji.baidu.com/ac-web/apps/list/my"
+          },
+          "https://demo.tongji.baidu.com/web/source/engine",
+          "--",
+          "58.214.31.170",
+          "2369444818099010831",
+          "正在访问",
+          "1"
+        ],
+        [
+          "2023/03/09 08:40:13",
+          "北京",
+          {
+            "fromType": "百度",
+            "url": "https://demo.tongji.baidu.com/sc-web/home/trans/event/edit"
+          },
+          "https://demo.tongji.baidu.com/web/optes",
+          "百度统计趋势分析报告推送邮件",
+          "223.104.41.85",
+          "1766654450874761287",
+          2,
+          "2"
+        ],
+        [
+          "2023/03/09 08:40:13",
+          "沈阳",
+          {
+            "fromType": "百度",
+            "url": "https://demo.tongji.baidu.com/ac-web/advanced"
+          },
+          "https://demo.tongji.baidu.com/ac-web/apps/list/my",
+          "百度統計",
+          "175.167.148.77",
+          "1910558167637374270",
+          "正在访问",
+          "1"
+        ]
+      ]
+    ],
+    "total": 20000
+  },
+  "msg": "",
+  "status": 0
+}

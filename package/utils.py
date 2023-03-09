@@ -16,7 +16,6 @@ except:
     pass
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-ROOT_PATH = os.path.dirname(CURRENT_PATH)
 
 
 def loadConfig() -> dict:
@@ -25,7 +24,7 @@ def loadConfig() -> dict:
     return config
 
 def queryTokenInfo() -> dict:
-    with sqlite3.connect(f'{ROOT_PATH}/data/cache.db') as con:
+    with sqlite3.connect(f'{CURRENT_PATH}/data/cache.db') as con:
         cur = con.cursor()
         cur.execute('''SELECT name, value, COALESCE(expires, 0) FROM token_info''')
         rows = cur.fetchall()
@@ -38,7 +37,7 @@ def queryTokenInfo() -> dict:
     return result
 
 def saveTokenInfo(token_info) -> bool:
-    with sqlite3.connect(f'{ROOT_PATH}/data/cache.db') as con:
+    with sqlite3.connect(f'{CURRENT_PATH}/data/cache.db') as con:
         cur = con.cursor()
         for key, value in token_info.items():
             cur.execute(
@@ -49,16 +48,16 @@ def saveTokenInfo(token_info) -> bool:
 
 def saveRawData(site_id: str, content: dict) -> None:
     print(content)
-    ## save raw data as json file
+    # save raw data as json file in data/raw_data.json
     try:
         import codecs
-        with codecs.open(f'{CURRENT_PATH}/raw_data.json', 'w', 'utf-8') as f:
+        with codecs.open(f'{CURRENT_PATH}/data/raw_data.json', 'w', 'utf-8') as f:
             f.write(json.dumps(content, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
     except Exception as e:
         print(e)
         pass
 
-    ## save raw data to mongodb
+    # save raw data to mongodb
         log = {
             'site_id': site_id,
             'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
@@ -99,7 +98,7 @@ def queryDivision(name: str, ip: str='') -> tuple:
         country = '中国'
 
     if not country:
-        with sqlite3.connect(f'{ROOT_PATH}/data/divisions.db') as con:
+        with sqlite3.connect(f'{CURRENT_PATH}/data/divisions.db') as con:
             cur = con.cursor()
 
             rows = cur.execute('SELECT name, code FROM city WHERE name LIKE ?', (f'%{name}%',)).fetchall()
