@@ -1,8 +1,21 @@
+-- Function structure for trigger_set_timestamp
+
+DROP FUNCTION IF EXISTS "public"."trigger_set_timestamp"();
+CREATE OR REPLACE FUNCTION "public"."trigger_set_timestamp"()
+  RETURNS "pg_catalog"."trigger" AS $BODY$
+BEGIN
+  NEW._updated_at = NOW();
+  RETURN NEW;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
 -- public.visitors definition
 
 -- Drop table
 
--- DROP TABLE public.visitors;
+DROP TABLE IF EXISTS public.visitors CASCADE;
 
 CREATE TABLE public.visitors (
 	visitor_id varchar(255) NOT NULL, -- 访客ID，即百度的访客标识码
@@ -54,7 +67,7 @@ UPDATE
 
 -- Drop table
 
--- DROP TABLE public.sessions;
+DROP TABLE IF EXISTS public.sessions CASCADE;
 
 CREATE TABLE public.sessions (
 	session_id varchar(255) NOT NULL, -- 会话ID
@@ -203,7 +216,7 @@ UPDATE
 
 -- Drop table
 
--- DROP TABLE public.events;
+DROP TABLE IF EXISTS public.events CASCADE;
 
 CREATE TABLE public.events (
 	event_id varchar(255) NOT NULL, -- 事件ID

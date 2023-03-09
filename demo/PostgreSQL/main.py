@@ -86,7 +86,7 @@ if __name__ == '__main__':
         print(f'query visitor - {idx+1}/{l}')
         visitor_id = row[0]
         try:
-            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id)
+            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # change your site_id here
         except:
             traceback.print_exc()
             continue
@@ -95,7 +95,7 @@ if __name__ == '__main__':
             saveToDB(item)
 
     # fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=100)
+    result = bd.fetchRealTimeData('16847648', page_size=100) # change your site_id here
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')

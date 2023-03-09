@@ -54,7 +54,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 
 使用 `baidu_tongji.py` 获取的数据，并存储到 Elasticsearch 中。
 
-1. 修改 `main.py` 中的账号密码，运行即可。（首次运行，建议先创建索引，详见代码注释。）
+0. 修改 `main.py` 中的账号密码，运行即可。（首次运行，建议先创建索引，详见代码注释。）
 
 ![Elasticsearch](demo/Elasticsearch/Screenshot.png)
 
