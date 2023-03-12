@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+import codecs
 import os
 import re
 import sqlite3
@@ -9,7 +10,6 @@ from urllib.parse import parse_qs, unquote_plus, urlparse
 import arrow
 import orjson
 import orjson as json
-import redis
 import requests
 import yaml
 
@@ -19,8 +19,6 @@ except:
     pass
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-rd_pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True) # Change this to your own redis settings
-rd = redis.Redis(connection_pool=rd_pool)
 mongodb_uri = 'mongodb://localhost:27017/' # Change this to your own MongoDB URI
 
 
@@ -56,7 +54,6 @@ def saveRawData(site_id: str, content: dict) -> None:
     print(content)
     # save raw data as json file in data/raw_data.json
     try:
-        import codecs
         with codecs.open(f'{CURRENT_PATH}/data/raw_data.json', 'w', 'utf-8') as f:
             f.write(json.dumps(content, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
     except Exception as e:
@@ -93,6 +90,7 @@ def getTime(start_time: str) -> tuple:
     return (start_time, date_time, unix_timestamp)
 
 def queryDivision(name: str, ip: str='') -> tuple:
+    is_ipv4 = re.fullmatch(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip)
     country, province, city = '', '', ''
 
     # 直辖市
@@ -114,7 +112,7 @@ def queryDivision(name: str, ip: str='') -> tuple:
                 provinceCode = cityCode[:2]
                 province = cur.execute('''SELECT name FROM province WHERE code = ?''', (provinceCode,)).fetchone()[0]
                 country = '中国'
-            elif ip:
+            elif is_ipv4:
                 url = 'https://ip.taobao.com/outGetIpInfo'
                 params = {
                     'ip': ip,

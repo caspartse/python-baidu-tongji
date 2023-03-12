@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+import codecs
 import os
 import sys
-from os.path import abspath, dirname, join
-
-sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
-
-import codecs
 import traceback
+from os.path import abspath, dirname, join
 
 import arrow
 import orjson as json
 import requests
+
+sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
+
 from baidu_tongji import baiduTongji
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     # # uncomment the following code if you're trying this demo for the first time.
     # for index_name in ['visitors', 'sessions', 'events']:
     #     try:
-    #         with codecs.open(f'{CURRENT_PATH}/mappings_{index_name}.json', encoding='utf-8') as f:
+    #         with codecs.open(f'{CURRENT_PATH}/mappings/{index_name}.json', encoding='utf-8') as f:
     #             raw = json.loads(f.read())
     #         mappings = raw['mappings']
     #         result = kb.createIndex(index_name, mappings)
@@ -142,14 +142,14 @@ if __name__ == '__main__':
     #         traceback.print_exc()
     #         continue
 
-    bd = baiduTongji(debug=True)
+    bd = baiduTongji(debug=True) # set debug=False if useing in production environment
 
-    # query by visitor_id which has negative event_duration
+    # query by visitor_id which "event_duration" is -10000 (means the visitor is still online)
     # you can change the order by condition to get the latest data, or change the limit to get more data
     query = '''
         SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
         FROM events
-        WHERE event_duration < 0
+        WHERE event_duration = -10000
         GROUP BY visitor_id, event_id
         ORDER BY min_receive_time DESC
         LIMIT 10;

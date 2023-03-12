@@ -27,15 +27,24 @@ CREATE TABLE public.visitors (
 	first_search_engine varchar(255) NULL, -- 首次搜索引擎名称
 	first_search_keyword text NULL, -- 首次搜索引擎关键词
 	first_traffic_source_type varchar(255) NULL, -- 首次流量来源类型
+	latest_visit_time timestamp NULL, -- 最近一次访问时间
 	utm_campaign varchar(255) NULL, -- 广告系列名称
 	utm_content varchar(255) NULL, -- 广告系列内容
 	utm_medium varchar(255) NULL, -- 广告系列媒介
 	utm_source varchar(255) NULL, -- 广告系列来源
 	utm_term varchar(255) NULL, -- 广告系列字词
+	hf_ip varchar(255) NULL, -- 高频IP
+	hf_country varchar(255) NULL, -- 高频国家
+	hf_province varchar(255) NULL, -- 高频省份
+	hf_city varchar(255) NULL, -- 高频城市
+	frequency int8 NULL, -- 访问频次
+	total_duration int8 NULL, -- 累计访问时长
+	total_visit_pages int8 NULL, -- 累计访问页数
 	"_created_at" timestamp(6) NULL DEFAULT now(),
 	"_updated_at" timestamp(6) NULL DEFAULT now(),
 	CONSTRAINT visitors_pkey PRIMARY KEY (visitor_id)
 );
+CREATE INDEX visitors_latest_visit_time_idx ON public.visitors USING brin (latest_visit_time);
 COMMENT ON TABLE public.visitors IS '访客表';
 
 -- Column comments
@@ -49,11 +58,19 @@ COMMENT ON COLUMN public.visitors.first_referrer_host IS '首次前向域名';
 COMMENT ON COLUMN public.visitors.first_search_engine IS '首次搜索引擎名称';
 COMMENT ON COLUMN public.visitors.first_search_keyword IS '首次搜索引擎关键词';
 COMMENT ON COLUMN public.visitors.first_traffic_source_type IS '首次流量来源类型';
+COMMENT ON COLUMN public.visitors.latest_visit_time IS '最近一次访问时间';
 COMMENT ON COLUMN public.visitors.utm_campaign IS '广告系列名称';
 COMMENT ON COLUMN public.visitors.utm_content IS '广告系列内容';
 COMMENT ON COLUMN public.visitors.utm_medium IS '广告系列媒介';
 COMMENT ON COLUMN public.visitors.utm_source IS '广告系列来源';
 COMMENT ON COLUMN public.visitors.utm_term IS '广告系列字词';
+COMMENT ON COLUMN public.visitors.hf_ip IS '高频IP';
+COMMENT ON COLUMN public.visitors.hf_country IS '高频国家';
+COMMENT ON COLUMN public.visitors.hf_province IS '高频省份';
+COMMENT ON COLUMN public.visitors.hf_city IS '高频城市';
+COMMENT ON COLUMN public.visitors.frequency IS '访问频次';
+COMMENT ON COLUMN public.visitors.total_duration IS '累计访问时长';
+COMMENT ON COLUMN public.visitors.total_visit_pages IS '累计访问页数';
 
 -- Table Triggers
 
@@ -117,7 +134,7 @@ CREATE TABLE public.sessions (
 	resolution varchar(255) NULL, -- 屏幕分辨率
 	search_engine varchar(255) NULL, -- 搜索引擎名称
 	search_keyword text NULL, -- 搜索关键词
-	source_from_type varchar(255) NULL, -- 流量来源类型
+	source_from_type text NULL, -- 流量来源类型
 	source_tip varchar(255) NULL, -- fromType_tip
 	source_url text NULL, -- 前向地址
 	traffic_source_type varchar(255) NULL, -- 流量来源类型

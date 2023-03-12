@@ -2,13 +2,13 @@
 # -*- coding:utf-8 -*-
 import os
 import sys
+import traceback
 from os.path import abspath, dirname, join
+
+import psycopg2
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
-import traceback
-
-import psycopg2
 from baidu_tongji import baiduTongji
 
 conn = psycopg2.connect(host='localhost', port='5432', dbname='website_traffic', user='postgres', password='123456') # Change this to your own PostgreSQL settings
@@ -54,6 +54,8 @@ def saveToDB(entity: dict) -> bool:
             traceback.print_exc()
             conn.rollback()
 
+    return True
+
 
 if __name__ == '__main__':
     # # truncate tables
@@ -65,14 +67,14 @@ if __name__ == '__main__':
     # cur.execute(q)
     # conn.commit()
 
-    bd = baiduTongji(debug=True)
+    bd = baiduTongji(debug=True) # set debug=False if useing in production environment
 
-    # query by visitor_id which has negative event_duration
+    # query by visitor_id which "event_duration" is -10000 (means the visitor is still online)
     # you can change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
-        WHERE event_duration < 0
+        WHERE event_duration = -10000
         GROUP BY visitor_id
         ORDER BY min_receive_time DESC
         LIMIT 10;
@@ -99,26 +101,6 @@ if __name__ == '__main__':
         print(f'fetch new data - {idx+1}/{l}')
         print(item)
         saveToDB(item)
-
-    # update sessions duration which is negative
-    q = '''
-        UPDATE sessions t2
-        SET duration = t1.total_duration
-        FROM (
-            SELECT session_id, sum(event_duration) AS total_duration
-            FROM events
-            WHERE event_duration >= 0
-            AND session_id IN (
-                SELECT session_id
-                FROM sessions
-                WHERE duration <= 0
-            )
-            GROUP BY session_id
-        ) t1
-        WHERE t2.session_id = t1.session_id;
-    '''
-    cur.execute(q)
-    conn.commit()
 
     cur.close()
     conn.close()

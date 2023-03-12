@@ -2,7 +2,11 @@
 # -*- coding:utf-8 -*-
 from hashlib import md5
 
+import redis
 from utils import *
+
+rd_pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True) # Change this to your own redis settings
+rd = redis.Redis(connection_pool=rd_pool)
 
 
 class baiduTongji(object):
@@ -143,6 +147,7 @@ class baiduTongji(object):
             start_time, area, source, access_page, search_word, ip, visitor_id, duration, visit_pages = o
 
             start_time, date_time, unix_timestamp= getTime(start_time)
+            raw_area = area
             country, province, city = queryDivision(area, ip)
 
             if access_page != d['accessPage']:
@@ -267,7 +272,7 @@ class baiduTongji(object):
                 'os': _os,
                 'os_type': os_type,
                 'province': province,
-                'raw_area': area,
+                'raw_area': raw_area,
                 'referrer': referrer,
                 'referrer_host': referrer_host,
                 'resolution': resolution,
@@ -331,6 +336,7 @@ class baiduTongji(object):
                 'first_search_engine': first_search_engine,
                 'first_search_keyword': first_search_keyword,
                 'first_traffic_source_type': first_traffic_source_type,
+                'latest_visit_time': start_time,
                 'utm_campaign': utm_campaign,
                 'utm_content': utm_content,
                 'utm_medium': utm_medium,
@@ -340,7 +346,7 @@ class baiduTongji(object):
 
 
             """
-            pageview info
+            event info
             """
             latest_channel_id = channel_id
             latest_landing_page = landing_page
@@ -385,7 +391,7 @@ class baiduTongji(object):
 
                 event_id = 'p_' + md5(f'{session_id}_{int(unix_timestamp)}_{url}'.encode('utf-8')).hexdigest().lower()
 
-                pageview = {
+                event = {
                     'event_id': event_id,
                     'session_id': session_id,
                     'visitor_id': visitor_id,
@@ -435,7 +441,7 @@ class baiduTongji(object):
                     'utm_source': utm_source,
                     'utm_term': utm_term,
                 }
-                event_list.append(pageview)
+                event_list.append(event)
 
             result.append(
                 {
