@@ -10,8 +10,16 @@ import psycopg2
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
 from baidu_tongji import baiduTongji
+from utils import loadConfig
 
-conn = psycopg2.connect(host='localhost', port='5432', dbname='website_traffic', user='postgres', password='123456') # Change this to your own PostgreSQL settings
+CONFIG = loadConfig()
+
+pg_host = CONFIG['postgresql']['host']
+pg_port = CONFIG['postgresql']['port']
+pg_dbname = CONFIG['postgresql']['dbname']
+pg_username = CONFIG['postgresql']['username']
+pg_password = CONFIG['postgresql']['password']
+conn = psycopg2.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
 cur = conn.cursor()
 
 
@@ -86,7 +94,7 @@ if __name__ == '__main__':
         print(f'query visitor - {idx+1}/{l}')
         visitor_id = row[0]
         try:
-            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # change your site_id here
+            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # Change your site_id here
         except:
             traceback.print_exc()
             continue
@@ -95,7 +103,7 @@ if __name__ == '__main__':
             saveToDB(item)
 
     # fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=100) # change your site_id here
+    result = bd.fetchRealTimeData('16847648', page_size=100) # Change your site_id here
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')

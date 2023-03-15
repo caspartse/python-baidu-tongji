@@ -13,17 +13,25 @@ import requests
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
 from baidu_tongji import baiduTongji
+from utils import loadConfig
+
+CONFIG = loadConfig()
+kb_scheme = CONFIG['kibana']['scheme']
+kb_host = CONFIG['kibana']['host']
+kb_port = CONFIG['kibana']['port']
+kb_username = CONFIG['kibana']['username']
+kb_password = CONFIG['kibana']['password']
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-# You can also use the Elasticsearch Python Client (https://github.com/elastic/elasticsearch-py), but it may take some time to configure.
+# you can also use the Elasticsearch Python Client (https://github.com/elastic/elasticsearch-py), but it may take some time to configure.
 class Kibana(object):
     def __init__(self):
         super(Kibana, self).__init__()
-        self.url = 'http://localhost:5601/api/console/proxy' # Change this to your own Kibana host and port, maybe you need use https
+        self.url = f'{kb_scheme}://{kb_host}:{kb_port}/api/console/proxy' # maybe you need use https
         self.sess = requests.Session()
-        self.sess.auth = requests.auth.HTTPBasicAuth('elastic', 'uOu7t890nmjqVTAPp5kE') # Change this to your own username and password of Kibana
+        self.sess.auth = requests.auth.HTTPBasicAuth(kb_username, kb_password)
         self.sess.headers.update({'kbn-xsrf': 'kibana'})
 
     def deleteIndex(self, index_name: str, mappings: dict) -> bool:
@@ -68,7 +76,7 @@ class Kibana(object):
             'doc': data
         }
         try:
-            resp = self.sess.post(self.url, params=params, json=json.dumps(data), timeout=(10, 30))
+            resp = self.sess.post(self.url, params=params, json=data, timeout=(10, 30))
             result = resp.json()
         except:
             traceback.print_exc()
@@ -86,7 +94,7 @@ class Kibana(object):
         result = resp.json()
         return result
 
-def changeToUTC(local_time: str, tzinfo: str = 'Asia/Shanghai') -> str:
+def changeToUTC(local_time: str, tzinfo: str='Asia/Shanghai') -> str:
     try:
         utc_time = arrow.get(local_time, tzinfo=tzinfo).to('UTC').format('YYYY-MM-DD HH:mm:ss')
         return utc_time
@@ -162,7 +170,7 @@ if __name__ == '__main__':
             print(f'query visitor - {idx+1}/{l}')
             visitor_id = row[0]
             try:
-                result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # change your site_id here
+                result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # Change your site_id here
             except:
                 traceback.print_exc()
                 continue
@@ -171,7 +179,7 @@ if __name__ == '__main__':
                 saveToES(kb, item)
 
     # fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=100) # change your site_id here
+    result = bd.fetchRealTimeData('16847648', page_size=100) # Change your site_id here
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')

@@ -19,13 +19,15 @@ except:
     pass
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-mongodb_uri = 'mongodb://localhost:27017/' # Change this to your own MongoDB URI
 
 
 def loadConfig() -> dict:
     with open(f'{CURRENT_PATH}/config.yaml', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     return config
+
+CONFIG = loadConfig()
+mongodb_uri = CONFIG['mongodb']['uri']
 
 def queryTokenInfo() -> dict:
     with sqlite3.connect(f'{CURRENT_PATH}/data/cache.db') as con:
@@ -40,7 +42,7 @@ def queryTokenInfo() -> dict:
 
     return result
 
-def saveTokenInfo(token_info) -> bool:
+def saveTokenInfo(token_info: dict) -> bool:
     with sqlite3.connect(f'{CURRENT_PATH}/data/cache.db') as con:
         cur = con.cursor()
         for key, value in token_info.items():
@@ -52,9 +54,9 @@ def saveTokenInfo(token_info) -> bool:
 
 def saveRawData(site_id: str, content: dict) -> None:
     print(content)
-    # save raw data as json file in data/raw_data.json
+    # save raw data as json file for debug.
     try:
-        with codecs.open(f'{CURRENT_PATH}/data/raw_data.json', 'w', 'utf-8') as f:
+        with codecs.open(f'{CURRENT_PATH}/data/{site_id}_raw_data.json', 'w', 'utf-8') as f:
             f.write(json.dumps(content, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
     except Exception as e:
         print(e)

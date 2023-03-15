@@ -5,19 +5,24 @@ from hashlib import md5
 import redis
 from utils import *
 
-rd_pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True) # Change this to your own redis settings
+CONFIG = loadConfig()
+
+rd_host = CONFIG['redis']['host']
+rd_port = CONFIG['redis']['port']
+rd_password = CONFIG['redis']['password']
+rd_db = CONFIG['redis']['db']
+rd_pool = redis.ConnectionPool(host=rd_host, port=rd_port, password=rd_password, db=rd_db, decode_responses=True)
 rd = redis.Redis(connection_pool=rd_pool)
 
 
 class baiduTongji(object):
-    def __init__(self, debug=False):
+    def __init__(self, debug: bool=False):
         super(baiduTongji, self).__init__()
         self.debug = debug
         self.sess = requests.Session()
-        config = loadConfig()
-        self.client_id = config['api_key']
-        self.client_secret = config['secret_key']
-        self.auth_code = config['auth_code']
+        self.client_id = CONFIG['baidu']['api_key']
+        self.client_secret = CONFIG['baidu']['secret_key']
+        self.auth_code = CONFIG['baidu']['auth_code']
         token_info = queryTokenInfo()
         self.access_token = token_info['access_token']['value']
         self.refresh_token = token_info['refresh_token']['value']
@@ -96,7 +101,7 @@ class baiduTongji(object):
         content = resp.json()
         return content
 
-    def fetchRealTimeData(self, site_id, page_size=1000, visitor_id='') -> list:
+    def fetchRealTimeData(self, site_id: str, page_size: int=1000, visitor_id: str='') -> list:
         if self.debug:
             url = 'https://tongji.baidu.com/web5/demo/ajax/post'
             data = {
@@ -290,7 +295,7 @@ class baiduTongji(object):
                 'visit_pages': visit_pages,
                 'visitor_frequency': visitor_frequency,
                 'visitor_status': visitor_status,
-                'visitor_type': visitor_type,
+                'visitor_type': visitor_type
              }
 
 
@@ -341,7 +346,7 @@ class baiduTongji(object):
                 'utm_content': utm_content,
                 'utm_medium': utm_medium,
                 'utm_source': utm_source,
-                'utm_term': utm_term,
+                'utm_term': utm_term
             }
 
 
@@ -361,7 +366,7 @@ class baiduTongji(object):
             latest_utm_term = utm_term
             latest_utm_content = utm_content
 
-            paths = sorted(d['paths'], key=lambda x: x[0]) # sort by start_time asc
+            paths = sorted(d['paths'], key=lambda x: x[0]) # sort by event start_time asc
             event_list = []
             for idx, path in enumerate(paths):
                 start_time, duration, url = path
@@ -439,7 +444,7 @@ class baiduTongji(object):
                     'utm_content': utm_content,
                     'utm_medium': utm_medium,
                     'utm_source': utm_source,
-                    'utm_term': utm_term,
+                    'utm_term': utm_term
                 }
                 event_list.append(event)
 

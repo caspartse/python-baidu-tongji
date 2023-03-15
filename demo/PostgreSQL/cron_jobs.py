@@ -4,9 +4,26 @@
 update visitor's profile.
 run this script every day at 01:00:00
 """
+import os
+import sys
+import traceback
+from os.path import abspath, dirname, join
+
 import psycopg2
 
-conn = psycopg2.connect(host='localhost', port='5432', dbname='website_traffic', user='postgres', password='123456') # Change this to your own PostgreSQL settings
+sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
+
+from baidu_tongji import baiduTongji
+from utils import loadConfig
+
+CONFIG = loadConfig()
+
+pg_host = CONFIG['postgresql']['host']
+pg_port = CONFIG['postgresql']['port']
+pg_dbname = CONFIG['postgresql']['dbname']
+pg_username = CONFIG['postgresql']['username']
+pg_password = CONFIG['postgresql']['password']
+conn = psycopg2.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
 cur = conn.cursor()
 
 
@@ -43,7 +60,7 @@ if __name__ == '__main__':
     cur.execute(q)
     conn.commit()
 
-    # latest_visit_time, frequency, total_duration, total_visit_pages
+    # frequency, total_duration, total_visit_pages
     q = '''
         WITH info AS (
             SELECT visitor_id,

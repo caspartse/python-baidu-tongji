@@ -45,7 +45,11 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python programming 
 使用 `baidu_tongji.py` 获取的数据，并存储到 PostgreSQL 数据库中。
 
 0. 创建一个名为 `website_traffic` 的数据库。
-1. 执行 `DDL_website_traffic.sql` 创建表结构。
+    ```SQL
+    CREATE DATABASE website_traffic;
+    COMMENT ON DATABASE website_traffic IS '网站流量';
+    ```
+1. 执行 `DDL/DDL_website_traffic.sql` 创建表结构。
 2. 修改 `main.py` 中的数据库信息，运行即可。
 
 ![PostgreSQL](demo/PostgreSQL/Screenshot.png)

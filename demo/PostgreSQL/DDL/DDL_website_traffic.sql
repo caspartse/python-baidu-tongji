@@ -1,6 +1,6 @@
 -- Function structure for trigger_set_timestamp
 
-DROP FUNCTION IF EXISTS "public"."trigger_set_timestamp"();
+DROP FUNCTION IF EXISTS "public"."trigger_set_timestamp"() CASCADE;
 CREATE OR REPLACE FUNCTION "public"."trigger_set_timestamp"()
   RETURNS "pg_catalog"."trigger" AS $BODY$
 BEGIN
