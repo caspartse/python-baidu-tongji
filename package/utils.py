@@ -97,22 +97,22 @@ def saveRawData(site_id: str, content: dict) -> None:
         traceback.print_exc()
 
     # save raw data to mongodb
-    try:
-        log = {
-            'site_id': site_id,
-            'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
-            'items': content.get('data', content.get('result'))['items']
-        }
-        mongodb_uri = CONFIG['mongodb']['uri']
-        client = MongoClient(mongodb_uri)
-        db = client['website_traffic']
-        collection = db['log']
-        if isinstance(log, list):
-            collection.insert_many(log)
-        else:
-            collection.insert_one(log)
-    except:
-        traceback.print_exc()
+    # try:
+    #     log = {
+    #         'site_id': site_id,
+    #         'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
+    #         'items': content.get('data', content.get('result'))['items']
+    #     }
+    #     mongodb_uri = CONFIG['mongodb']['uri']
+    #     client = MongoClient(mongodb_uri)
+    #     db = client['website_traffic']
+    #     collection = db['log']
+    #     if isinstance(log, list):
+    #         collection.insert_many(log)
+    #     else:
+    #         collection.insert_one(log)
+    # except:
+    #     traceback.print_exc()
 
     return None
 
