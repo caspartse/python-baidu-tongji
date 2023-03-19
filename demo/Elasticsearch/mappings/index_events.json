@@ -39,6 +39,15 @@
             "unix_timestamp": {
                 "type": "float"
             },
+            "event": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
             "browser": {
                 "type": "text",
                 "fields": {
@@ -48,7 +57,7 @@
                     }
                 }
             },
-            "browser_type": {
+            "browser_language": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -57,7 +66,7 @@
                     }
                 }
             },
-            "channel_id": {
+            "browser_type": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -84,7 +93,7 @@
                     }
                 }
             },
-            "event_name": {
+            "device_type": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -93,8 +102,26 @@
                     }
                 }
             },
-            "event_duration": {
+            "duration": {
                 "type": "long"
+            },
+            "enhanced_event_list": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "enhanced_traffic_group": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
             },
             "hmci": {
                 "type": "text",
@@ -144,17 +171,17 @@
             "ip": {
                 "type": "ip"
             },
+            "is_first_day": {
+                "type": "boolean"
+            },
             "is_first_time": {
                 "type": "boolean"
             },
-            "latest_channel_id": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
+            "is_session_end": {
+                "type": "boolean"
+            },
+            "is_session_start": {
+                "type": "boolean"
             },
             "latest_landing_page": {
                 "type": "text",
@@ -175,6 +202,15 @@
                 }
             },
             "latest_referrer_host": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "latest_referrer_host_sld": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -255,6 +291,15 @@
                     }
                 }
             },
+            "onsite_search_term": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
             "os": {
                 "type": "text",
                 "fields": {
@@ -300,6 +345,34 @@
                     }
                 }
             },
+            "referrer_host_sld": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "resolution": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "screen_height": {
+                "type": "long"
+            },
+            "screen_width": {
+                "type": "long"
+            },
+            "session_start_time": {
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+            },
             "traffic_source_type": {
                 "type": "text",
                 "fields": {
@@ -328,6 +401,15 @@
                 }
             },
             "url_host": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "url_host_sld": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -391,6 +473,18 @@
                 }
             },
             "utm_term": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "visitor_type": {
+                "type": "long"
+            },
+            "wx_share_from": {
                 "type": "text",
                 "fields": {
                     "keyword": {

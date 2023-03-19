@@ -14,14 +14,9 @@
                 "type": "date",
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
             },
-            "channel_id": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
+            "last_visit_time": {
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
             },
             "first_landing_page": {
                 "type": "text",
@@ -77,9 +72,44 @@
                     }
                 }
             },
-            "latest_visit_time" : {
-                "type" : "date",
-                "format" : "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+            "frequency": {
+                "type": "long"
+            },
+            "hf_city": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "hf_country": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "hf_ip": {
+                "type" : "ip"
+            },
+            "hf_province": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "total_duration": {
+                "type": "long"
+            },
+            "total_visit_pages": {
+                "type": "long"
             },
             "utm_campaign": {
                 "type": "text",
@@ -125,39 +155,6 @@
                         "ignore_above": 256
                     }
                 }
-            },
-            "hf_ip": {
-                "type" : "ip"
-            },
-            "hf_country": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
-            },
-            "hf_province": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
-            },
-            "hf_city": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
-            },
-            "frequency": {
-                "type": "long"
             }
         }
     }

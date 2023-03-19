@@ -102,25 +102,16 @@
                     }
                 }
             },
+            "browser_language": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
             "browser_type": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
-            },
-            "browser_version": {
-                "type": "text",
-                "fields": {
-                    "keyword": {
-                        "type": "keyword",
-                        "ignore_above": 256
-                    }
-                }
-            },
-            "channel_id": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -147,7 +138,7 @@
                     }
                 }
             },
-            "cookie_enabled": {
+            "cookie_enable": {
                 "type": "boolean"
             },
             "country": {
@@ -172,6 +163,24 @@
                 "type": "long"
             },
             "end_page": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "enhanced_traffic_group": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "first_event_id": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -270,7 +279,7 @@
             "is_first_time": {
                 "type": "boolean"
             },
-            "java_enabled": {
+            "java_enable": {
                 "type": "boolean"
             },
             "landing_page": {
@@ -282,7 +291,7 @@
                     }
                 }
             },
-            "language": {
+            "last_event_id": {
                 "type": "text",
                 "fields": {
                     "keyword": {
@@ -291,7 +300,7 @@
                     }
                 }
             },
-            "latest_visit_time": {
+            "last_visit_time": {
                 "type": "date",
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
             },
@@ -349,6 +358,15 @@
                     }
                 }
             },
+            "referrer_host_sld": {
+                "type" : "text",
+                "fields" : {
+                    "keyword" : {
+                        "type" : "keyword",
+                        "ignore_above" : 256
+                    }
+                }
+            },
             "resolution": {
                 "type": "text",
                 "fields": {
@@ -357,6 +375,12 @@
                         "ignore_above": 256
                     }
                 }
+            },
+            "screen_height": {
+                "type": "long"
+            },
+            "screen_width": {
+                "type": "long"
             },
             "search_engine": {
                 "type": "text",
@@ -460,10 +484,6 @@
             "visit_pages": {
                 "type": "long"
             },
-            "visit_time": {
-                "type": "date",
-                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
-            },
             "visitor_frequency": {
                 "type": "long"
             },
@@ -477,6 +497,15 @@
                 }
             },
             "visitor_type": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "wx_share_from": {
                 "type": "text",
                 "fields": {
                     "keyword": {

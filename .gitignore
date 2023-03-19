@@ -2,5 +2,7 @@ __pycache__/
 .DS_Store
 .idea
 .vscode
+reference/
+tests/debug.py
+tests/validation.py
 venv/
-*.crt

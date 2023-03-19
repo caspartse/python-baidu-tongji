@@ -13,7 +13,7 @@ import psycopg2
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
-from baidu_tongji import baiduTongji
+from baidu_tongji import BaiduTongji
 from utils import loadConfig
 
 CONFIG = loadConfig()
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         SET hf_ip = info.ip, hf_country= info.country, hf_province= info.province, hf_city= info.city
         FROM info
         WHERE v.visitor_id = info.visitor_id
-        AND latest_visit_time >= (NOW() - INTERVAL '48 HOURS'); -- visitors in the last 48 hours only
+        AND last_visit_time >= (NOW() - INTERVAL '48 HOURS'); -- visitors in the last 48 hours only
     '''
     cur.execute(q)
     conn.commit()
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         SET frequency = info.frequency, total_duration = info.total_duration, total_visit_pages = info.total_visit_pages
         FROM info
         WHERE v.visitor_id = info.visitor_id
-        AND latest_visit_time >= (NOW() - INTERVAL '48 HOURS'); -- visitors in the last 48 hours only
+        AND last_visit_time >= (NOW() - INTERVAL '48 HOURS'); -- visitors in the last 48 hours only
     '''
     cur.execute(q)
     conn.commit()

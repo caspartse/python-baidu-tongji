@@ -1,34 +1,34 @@
 %YAML 1.2
 ---
-# baidu openapi, https://tongji.baidu.com/api/manual/Chapter2/openapi.html
+# Baidu openapi, https://tongji.baidu.com/api/manual/Chapter2/openapi.html
 baidu:
-  api_key: 'your_api_key'
-  secret_key: 'your_secret_key'
-  auth_code: 'your_auth_code'
+  api_key: your_api_key
+  secret_key: your_secret_key
+  auth_code: your_auth_code
 
-# redis
+# Redis
 redis:
-  host: 'localhost'
+  host: localhost
   port: 6379
   db: 0
   password: ''
 
-# mongodb (optional)
+# MongoDB (optional)
 mongodb:
-  uri: 'mongodb://localhost:27017'
+  uri: mongodb://localhost:27017
 
-# postgresql (optional, for demo)
+# PostgreSQL (optional, for demo)
 postgresql:
-  host: 'localhost'
+  host: localhost
   port: 5432
-  dbname: 'website_traffic'
-  username: 'postgres'
-  password: '123456'
+  dbname: website_traffic
+  username: postgres
+  password: 123456
 
-# kibana (optional, for demo)
+# Kibana (optional, for demo)
 kibana:
-  scheme: 'http'
-  host: 'localhost'
+  scheme: http
+  host: localhost
   port: 5601
-  username: 'elastic'
-  password: '123456'
+  username: elastic
+  password: 123456

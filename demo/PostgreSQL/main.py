@@ -9,10 +9,12 @@ import psycopg2
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
-from baidu_tongji import baiduTongji
-from utils import loadConfig
+from baidu_tongji import BaiduTongji
+from utils import loadConfig, loadDimensions
 
 CONFIG = loadConfig()
+DIMENSIONS = loadDimensions()
+
 
 pg_host = CONFIG['postgresql']['host']
 pg_port = CONFIG['postgresql']['port']
@@ -21,6 +23,10 @@ pg_username = CONFIG['postgresql']['username']
 pg_password = CONFIG['postgresql']['password']
 conn = psycopg2.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
 cur = conn.cursor()
+
+site_id = '16847648'
+page_size = 100
+debug = True # set debug=False if useing in production environment
 
 
 def getTableColumns(table_name: str) -> dict:
@@ -75,14 +81,28 @@ if __name__ == '__main__':
     # cur.execute(q)
     # conn.commit()
 
-    bd = baiduTongji(debug=True) # set debug=False if useing in production environment
+    bd = BaiduTongji(debug=debug)
 
-    # query by visitor_id which "event_duration" is -10000 (means the visitor is still online)
-    # you can change the order by condition to get the latest data, or change the limit to get more data
+    # ADD COLUMN from custom_tracking_params
+    custom_tracking_params = DIMENSIONS['custom_tracking_params']
+    for column_name in custom_tracking_params:
+        try:
+            q = f'''
+                ALTER TABLE sessions ADD COLUMN IF NOT EXISTS {column_name} VARCHAR(255) NULL;
+                ALTER TABLE events ADD COLUMN IF NOT EXISTS {column_name} VARCHAR(255) NULL;
+            '''
+            cur.execute(q)
+            conn.commit()
+        except:
+            traceback.print_exc()
+            conn.rollback()
+
+    # query by visitor_id which "duration" is -10000 (means the visitor is still online)
+    # you could change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
-        WHERE event_duration = -10000
+        WHERE duration = -10000
         GROUP BY visitor_id
         ORDER BY min_receive_time DESC
         LIMIT 10;
@@ -94,20 +114,18 @@ if __name__ == '__main__':
         print(f'query visitor - {idx+1}/{l}')
         visitor_id = row[0]
         try:
-            result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # Change your site_id here
+            result = bd.fetchRealTimeData(site_id, page_size=page_size, visitor_id=visitor_id)
         except:
             traceback.print_exc()
             continue
         for item in result:
-            print(item)
             saveToDB(item)
 
     # fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=100) # Change your site_id here
+    result = bd.fetchRealTimeData(site_id, page_size=page_size)
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')
-        print(item)
         saveToDB(item)
 
     cur.close()

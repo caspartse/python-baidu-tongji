@@ -12,7 +12,7 @@ import requests
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
-from baidu_tongji import baiduTongji
+from baidu_tongji import BaiduTongji
 from utils import loadConfig
 
 CONFIG = loadConfig()
@@ -22,58 +22,24 @@ kb_port = CONFIG['kibana']['port']
 kb_username = CONFIG['kibana']['username']
 kb_password = CONFIG['kibana']['password']
 
-CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+site_id = '16847648'
+page_size = 100
+debug = True # set debug=False if useing in production environment
 
 
-# you can also use the Elasticsearch Python Client (https://github.com/elastic/elasticsearch-py), but it may take some time to configure.
+# you could also use the Elasticsearch Python Client (https://github.com/elastic/elasticsearch-py), but it may take some time to configure.
 class Kibana(object):
     def __init__(self):
         super(Kibana, self).__init__()
-        self.url = f'{kb_scheme}://{kb_host}:{kb_port}/api/console/proxy' # maybe you need use https
+        self.url = f'{kb_scheme}://{kb_host}:{kb_port}/api/console/proxy'
         self.sess = requests.Session()
         self.sess.auth = requests.auth.HTTPBasicAuth(kb_username, kb_password)
         self.sess.headers.update({'kbn-xsrf': 'kibana'})
-
-    def deleteIndex(self, index_name: str, mappings: dict) -> bool:
-        params = {
-            'path': f'/{index_name}',
-            'method': 'DELETE'
-        }
-        resp = self.sess.post(self.url, params=params)
-        result = resp.json()
-        return result
-
-    def createIndex(self, index_name: str, mappings: dict) -> bool:
-        params = {
-            'path': f'/{index_name}',
-            'method': 'PUT'
-        }
-        data = {
-            'mappings': mappings
-        }
-        resp = self.sess.post(self.url, params=params, json=data)
-        result = resp.json()
-        return result
 
     def insertDocument(self, index_name: str, doc_id: str, data: dict) -> dict:
         params = {
             'path': f'/{index_name}/_doc/{doc_id}',
             'method': 'POST'
-        }
-        try:
-            resp = self.sess.post(self.url, params=params, json=data, timeout=(10, 30))
-            result = resp.json()
-        except:
-            traceback.print_exc()
-        return result
-
-    def updateDocument(self,index_name: str, doc_id: str, data: dict) -> dict:
-        params = {
-            'path': f'/{index_name}/_update/{doc_id}',
-            'method': 'POST'
-        }
-        data = {
-            'doc': data
         }
         try:
             resp = self.sess.post(self.url, params=params, json=data, timeout=(10, 30))
@@ -114,7 +80,7 @@ def saveToES(self, entity: dict) -> bool:
         try:
             # change time zone from UTC+8 to UTC, because Elasticsearch is in UTC
             for k, v in data.items():
-                if k in ['date_time', 'first_visit_time', 'latest_visit_time', 'receive_time', 'start_time']:
+                if k in ['date_time', 'first_visit_time', 'last_visit_time', 'receive_time', 'session_start_time', 'start_time']:
                     data[k] = changeToUTC(v)
             result = self.insertDocument(index_name, doc_id, data)
             print(result)
@@ -127,37 +93,14 @@ def saveToES(self, entity: dict) -> bool:
 
 if __name__ == '__main__':
     kb = Kibana()
+    bd = BaiduTongji(debug=debug)
 
-    # # delete index ('visitors', 'sessions', 'events')
-    # for index_name in ['visitors', 'sessions', 'events']:
-    #     try:
-    #         result = kb.deleteIndex(index_name, {})
-    #         print(result)
-    #     except:
-    #         traceback.print_exc()
-    #         continue
-
-    # # load mappings from json file and create index ('visitors', 'sessions', 'events')
-    # # uncomment the following code if you're trying this demo for the first time.
-    # for index_name in ['visitors', 'sessions', 'events']:
-    #     try:
-    #         with codecs.open(f'{CURRENT_PATH}/mappings/{index_name}.json', encoding='utf-8') as f:
-    #             raw = json.loads(f.read())
-    #         mappings = raw['mappings']
-    #         result = kb.createIndex(index_name, mappings)
-    #         print(result)
-    #     except:
-    #         traceback.print_exc()
-    #         continue
-
-    bd = baiduTongji(debug=True) # set debug=False if useing in production environment
-
-    # query by visitor_id which "event_duration" is -10000 (means the visitor is still online)
-    # you can change the order by condition to get the latest data, or change the limit to get more data
+    # query by visitor_id which "duration" is -10000 (means the visitor is still online)
+    # you could change the order by condition to get the latest data, or change the limit to get more data
     query = '''
         SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
         FROM events
-        WHERE event_duration = -10000
+        WHERE duration = -10000
         GROUP BY visitor_id, event_id
         ORDER BY min_receive_time DESC
         LIMIT 10;
@@ -170,20 +113,18 @@ if __name__ == '__main__':
             print(f'query visitor - {idx+1}/{l}')
             visitor_id = row[0]
             try:
-                result = bd.fetchRealTimeData('16847648', page_size=100, visitor_id=visitor_id) # Change your site_id here
+                result = bd.fetchRealTimeData(site_id, page_size=page_size, visitor_id=visitor_id)
             except:
                 traceback.print_exc()
                 continue
             for item in result:
-                print(item)
                 saveToES(kb, item)
 
     # fetch new data
-    result = bd.fetchRealTimeData('16847648', page_size=100) # Change your site_id here
+    result = bd.fetchRealTimeData(site_id, page_size=page_size)
     l = len(result)
     for idx, item in enumerate(result):
         print(f'fetch new data - {idx+1}/{l}')
-        print(item)
         saveToES(kb, item)
 
     print('done.')

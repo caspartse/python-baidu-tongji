@@ -1,0 +1,41 @@
+%YAML 1.2
+---
+# Custom tracking parameters
+custom_tracking_params:
+  - activity_id
+  - channel_id
+  - utm_id
+
+# On-Site search parameters
+onsite_search_params:
+  - kw
+  - keyword
+  - q
+  - query
+  - s
+  - search
+  - text
+  - wd
+  - word
+
+# Traffic channel group, additional information could be found in package/data/data.db (table: source_category).
+traffic_channel_group:
+  - affiliates
+  - audio
+  - cross_network
+  - direct
+  - display
+  - email
+  - mobile_push_notifications
+  - organic_search
+  - organic_shopping
+  - organic_social
+  - organic_video
+  - paid_other
+  - paid_search
+  - paid_shopping
+  - paid_social
+  - paid_video
+  - referral
+  - sms
+  - internal
