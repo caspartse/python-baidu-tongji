@@ -172,7 +172,7 @@ class BaiduTongji(object):
             traffic_source_type = traffic_source['traffic_source_type']
             referrer = traffic_source['referrer']
             referrer_host = traffic_source['referrer_host']
-            referrer_host_sld = '.'.join(referrer_host.split('.')[-2:]) # Second-level domain, e.g. book.douban.com -> douban.com, movie.douban.com -> douban.com
+            referrer_host_sld = parseSLD(referrer_host) # Second-level domain, e.g. book.douban.com -> douban.com, www.google.com.hk -> google.com.hk
             search_engine = traffic_source['search_engine']
             access_host = urlparse(access_page).netloc
             access_path, access_full_path = parsetUrlPath(access_page)
@@ -400,9 +400,9 @@ class BaiduTongji(object):
                     is_session_end = False
 
                 duration = getDuration(duration)
-                referrer_host_sld = '.'.join(referrer_host.split('.')[-2:])
+                referrer_host_sld = parseSLD(referrer_host)
                 url_host = urlparse(url).netloc
-                url_host_sld = '.'.join(url_host.split('.')[-2:])
+                url_host_sld = parseSLD(url_host)
                 traffic_source_type = '站内来源' if url_host_sld == referrer_host_sld else traffic_source_type
                 url_path, url_full_path = parsetUrlPath(url)
                 url_query = urlparse(url).query
