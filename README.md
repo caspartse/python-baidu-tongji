@@ -110,7 +110,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
 2. 执行 `DDL/DDL_website_traffic.sql` 创建表结构。
 3. 运行 `python3 main.py` 即可。
 
-![PostgreSQL](assets/screenshots/demo_postgreSQL.png)
+![PostgreSQL](assets/screenshots/demo_postgresql.png)
 
 ### Elasticsearch
 
