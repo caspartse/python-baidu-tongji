@@ -17,7 +17,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
 ![before_after](assets/screenshots/before_after.png)
 
 - 🤔 **Before**：[原始返回数据 raw_data.json](./package/data/16847648_raw_data.json)
-- 🤩 **After**： [解析后的数据 result.json](./package/tests/result.json)
+- 🤩 **After**： [解析后的数据 result.json](./tests/result.json)
 
 
 ## 🧩 软件要求
