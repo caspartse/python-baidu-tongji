@@ -24,8 +24,8 @@ pg_password = CONFIG['postgresql']['password']
 conn = psycopg2.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
 cur = conn.cursor()
 
-site_id = '16847648'
-page_size = 100
+site_id = '16847648' # change to your site_id
+page_size = 100 # change page_size if you want, max is 1000
 debug = True # set debug=False if useing in production environment
 
 

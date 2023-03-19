@@ -22,8 +22,8 @@ kb_port = CONFIG['kibana']['port']
 kb_username = CONFIG['kibana']['username']
 kb_password = CONFIG['kibana']['password']
 
-site_id = '16847648'
-page_size = 100
+site_id = '16847648' # change to your site_id
+page_size = 100 # change page_size if you want, max is 1000
 debug = True # set debug=False if useing in production environment
 
 

@@ -138,7 +138,7 @@ class BaiduTongji(object):
                 'method': 'trend/latest/a',
                 'metrics': 'area,source,access_page,keyword,searchword,is_ad,visitorId,ip,visit_time,visit_pages,start_time',
                 'order': 'start_time,desc',
-                'max_results': page_size, # max allowed is 1000
+                'max_results': page_size, # max is 1000
                 'visitorId': visitor_id
             }
             resp = self.sess.get(url, params=params, timeout=(10, 30))

@@ -89,16 +89,15 @@ def saveRawData(site_id: str, content: dict) -> None:
     :param content: 原始数据
     :return: None
     """
-    # print(content)
     # save raw data as json file for debug.
     try:
         with codecs.open(f'{CURRENT_PATH}/data/{site_id}_raw_data.json', 'w', 'utf-8') as f:
             f.write(json.dumps(content, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
-    except Exception as e:
-        print(e)
-        pass
+    except:
+        traceback.print_exc()
 
     # save raw data to mongodb
+    try:
         log = {
             'site_id': site_id,
             'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
@@ -216,7 +215,6 @@ def queryDivision(name: str, ip: str='') -> tuple:
                                 provinceCode = data['proCode'][:2]
                                 city = data['city']
                                 cityCode = data['cityCode'][:4]
-                                print(country, province, city, provinceCode, cityCode, ip, name)
                         except:
                             pass
 
@@ -235,7 +233,6 @@ def queryDivision(name: str, ip: str='') -> tuple:
                         except:
                             traceback.print_exc()
                             print(name, ip)
-                            print(data)
                         # 省份名称规范化
                         try:
                             row = None
@@ -244,7 +241,6 @@ def queryDivision(name: str, ip: str='') -> tuple:
                         except:
                             traceback.print_exc()
                             print(name, ip)
-                            print(data)
 
     if all([country, province, city]):
         rd.hset('ip_location', ip, f'{country},{province},{city}')

@@ -15,8 +15,9 @@ from baidu_tongji import BaiduTongji
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
-site_id = '16847648'
-page_size = 100
+site_id = '16847648' # change to your site_id
+page_size = 100 # change page_size if you want, max is 1000
+debug = True # set debug=False if useing in production environment
 
 
 if __name__ == '__main__':
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     except:
         pass
 
-    bd = BaiduTongji(debug=True)
+    bd = BaiduTongji(debug=debug)
     result = bd.fetchRealTimeData(site_id, page_size=page_size)
     with codecs.open(f'{CURRENT_PATH}/result.json', 'w', 'utf-8') as f:
         f.write(json.dumps(result, option=orjson.OPT_INDENT_2 | orjson.OPT_SORT_KEYS).decode('utf-8'))
