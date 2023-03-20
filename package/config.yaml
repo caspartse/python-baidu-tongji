@@ -15,6 +15,7 @@ redis:
 
 # MongoDB (optional)
 mongodb:
+  enable: false # trun on if you want to use MongoDB.
   uri: mongodb://localhost:27017
 
 # PostgreSQL (optional, for demo)

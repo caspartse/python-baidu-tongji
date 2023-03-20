@@ -387,15 +387,20 @@ class BaiduTongji(object):
                     session['first_event_id'] = event_id
                     referrer = latest_referrer_host
                     referrer_host = latest_referrer_host
+                    prev_event_id = ''
+                    next_event_id = ''
                 else:
                     is_session_start = False
                     is_first_time = False
                     referrer = paths[idx - 1][2] # previous url
                     referrer_host = urlparse(referrer).netloc
+                    event_list[idx - 1]['next_event_id'] = event_id # previous event's next_event_id
+                    prev_event_id = event_list[idx - 1]['event_id'] # current event's prev_event_id
 
                 if (idx == l - 1) and (session_duration > 0) and (url == end_page):
                     is_session_end = True
                     session['last_event_id'] = event_id
+
                 else:
                     is_session_end = False
 
@@ -462,9 +467,11 @@ class BaiduTongji(object):
                     'latest_utm_medium': latest_utm_medium,
                     'latest_utm_source': latest_utm_source,
                     'latest_utm_term': latest_utm_term,
+                    'next_event_id': prev_event_id,
                     'onsite_search_term': onsite_search_term,
                     'os': _os,
                     'os_type': os_type,
+                    'prev_event_id': prev_event_id,
                     'province': province,
                     'referrer': referrer,
                     'referrer_host': referrer_host,

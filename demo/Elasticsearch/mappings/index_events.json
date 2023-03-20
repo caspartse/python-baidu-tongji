@@ -291,6 +291,15 @@
                     }
                 }
             },
+            "next_event_id": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
             "onsite_search_term": {
                 "type": "text",
                 "fields": {
@@ -310,6 +319,15 @@
                 }
             },
             "os_type": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                    }
+                }
+            },
+            "prev_event_id": {
                 "type": "text",
                 "fields": {
                     "keyword": {

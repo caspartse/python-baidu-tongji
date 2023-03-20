@@ -288,9 +288,11 @@ CREATE TABLE public.events (
     latest_utm_medium varchar(255) NULL, -- 最近一次广告系列媒介
     latest_utm_source varchar(255) NULL, -- 最近一次广告系列来源
     latest_utm_term varchar(255) NULL, -- 最近一次广告系列字词
+    next_event_id varchar(255) NULL, -- 下一个事件ID
     onsite_search_term text NULL, -- 站内搜索关键词
     os varchar(255) NULL, -- 操作系统
     os_type varchar(255) NULL, -- 操作系统类型
+    prev_event_id varchar(255) NULL, -- 上一个事件ID
     province varchar(255) NULL, -- 省份
     referrer text NULL, -- 前向地址
     referrer_host varchar(255) NULL, -- 前向域名
@@ -366,9 +368,11 @@ COMMENT ON COLUMN public.events.latest_utm_content IS '最近一次广告系列�
 COMMENT ON COLUMN public.events.latest_utm_medium IS '最近一次广告系列媒介';
 COMMENT ON COLUMN public.events.latest_utm_source IS '最近一次广告系列来源';
 COMMENT ON COLUMN public.events.latest_utm_term IS '最近一次广告系列字词';
+COMMENT ON COLUMN public.events.next_event_id IS '下一个事件ID';
 COMMENT ON COLUMN public.events.onsite_search_term IS '站内搜索关键词';
 COMMENT ON COLUMN public.events.os IS '操作系统';
 COMMENT ON COLUMN public.events.os_type IS '操作系统类型';
+COMMENT ON COLUMN public.events.prev_event_id IS '上一个事件ID';
 COMMENT ON COLUMN public.events.province IS '省份';
 COMMENT ON COLUMN public.events.referrer IS '前向地址';
 COMMENT ON COLUMN public.events.referrer_host IS '前向域名';

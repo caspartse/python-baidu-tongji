@@ -97,22 +97,23 @@ def saveRawData(site_id: str, content: dict) -> None:
         traceback.print_exc()
 
     # save raw data to mongodb
-    # try:
-    #     log = {
-    #         'site_id': site_id,
-    #         'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
-    #         'items': content.get('data', content.get('result'))['items']
-    #     }
-    #     mongodb_uri = CONFIG['mongodb']['uri']
-    #     client = MongoClient(mongodb_uri)
-    #     db = client['website_traffic']
-    #     collection = db['log']
-    #     if isinstance(log, list):
-    #         collection.insert_many(log)
-    #     else:
-    #         collection.insert_one(log)
-    # except:
-    #     traceback.print_exc()
+    if CONFIG['mongodb']['enable']:
+        try:
+            log = {
+                'site_id': site_id,
+                'timestamp': arrow.now().format('YYYY-MM-DD HH:mm:ss'),
+                'items': content.get('data', content.get('result'))['items']
+            }
+            mongodb_uri = CONFIG['mongodb']['uri']
+            client = MongoClient(mongodb_uri)
+            db = client['website_traffic']
+            collection = db['log']
+            if isinstance(log, list):
+                collection.insert_many(log)
+            else:
+                collection.insert_one(log)
+        except:
+            traceback.print_exc()
 
     return None
 
@@ -434,8 +435,10 @@ def parseOnSiteSearchTerm(url: str) -> str:
     query_params = {k: v[0] for k, v in query_params.items()}
     onsite_search_params = DIMENSIONS['onsite_search_params']
     for k, v in query_params.items():
-        if k in onsite_search_params:
-            onsite_search_term = unquote_plus(v)
+        term = unquote_plus(v)
+        onsite_search_term = '' if k not in onsite_search_params else term
+        if onsite_search_term:
+            break
     return onsite_search_term
 
 def parseEnhancedEvent(url: str, duration: int, is_first_time: bool, is_session_start: bool) -> list:
@@ -588,7 +591,7 @@ def parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, ut
             group = 'other'
 
     if group not in traffic_channel_group:
-        group = ''
+        group = 'not_set'
 
     return group
 
