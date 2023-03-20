@@ -400,7 +400,6 @@ class BaiduTongji(object):
                 if (idx == l - 1) and (session_duration > 0) and (url == end_page):
                     is_session_end = True
                     session['last_event_id'] = event_id
-
                 else:
                     is_session_end = False
 

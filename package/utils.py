@@ -471,9 +471,9 @@ def querySourceCategory(referrer_host: str) -> str:
     :return: 流量渠道组
     """
     category = ''
-    referrer_host = re.sub(r'^links?\.', '', referrer_host) # e.g. link.zhihu.com -> zhihu.com
-    sld = '.'.join(referrer_host.split('.')[-2:]) # Second-level domain, e.g. book.douban.com -> douban.com
-    brand = sld.split('.')[0] # e.g. douban.com -> douban
+    referrer_host = re.sub(r'^(links?|redir|ref|jump2|go)\.', '', referrer_host) # remove prefix, e.g. link.zhihu.com -> zhihu.com
+    sld = parseSLD(referrer_host) # Second-level domain, e.g. zhuanlan.zhihu.com -> zhihu.com
+    brand = sld.split('.')[0] # e.g. zhihu.com -> zhihu
     with sqlite3.connect(f'{CURRENT_PATH}/data/data.db') as con:
         cur = con.cursor()
         # match full referrer_host
