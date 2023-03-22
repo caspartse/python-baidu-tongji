@@ -97,15 +97,15 @@ if __name__ == '__main__':
             traceback.print_exc()
             conn.rollback()
 
-    # query by visitor_id which "duration" is -10000 (means the visitor is still online)
+    # query by visitor_id which "duration" is -10000, which means the visitor is still online
     # you could change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
         WHERE duration = -10000
         GROUP BY visitor_id
-        ORDER BY min_receive_time DESC
-        LIMIT 10;
+        ORDER BY min_receive_time DESC -- change order by condition to get the latest data
+        LIMIT 10; -- change limit to get more data
     '''
     cur.execute(q)
     rows = cur.fetchall()

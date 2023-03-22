@@ -109,7 +109,7 @@ class BaiduTongji(object):
         :param site_id: 站点 ID
         :param page_size: 每页条数
         :param visitor_id: 访客 ID
-        :return: 实时数据列表， [visitor, session, event_list]
+        :return: 实时数据列表
         """
         if self.debug:
             url = 'https://tongji.baidu.com/web5/demo/ajax/post'

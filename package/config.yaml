@@ -33,3 +33,11 @@ kibana:
   port: 5601
   username: elastic
   password: 123456
+
+# LBS, query ip location (optional)
+# amap: https://lbs.amap.com/api/webservice/guide/api/ipconfig
+# baidu: https://lbsyun.baidu.com/index.php?title=webapi/ip-api
+# tencent: https://lbs.qq.com/service/webService/webServiceGuide/webServiceIp
+lbs:
+  service: '' # if you want to use LBS, set service to 'amap', 'baidu' or 'tencent'
+  app_key: '' # your_app_key of amap or baidu or tencent

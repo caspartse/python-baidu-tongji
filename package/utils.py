@@ -121,7 +121,7 @@ def getTime(start_time: str) -> tuple:
     """
     处理时间信息
     :param start_time: 开始时间
-    :return: 时间信息元组, (start_time, date_time, unix_timestamp)
+    :return: 时间信息元组
     """
     # handle no date in start_time
     try:
@@ -133,12 +133,137 @@ def getTime(start_time: str) -> tuple:
     unix_timestamp = arrow.get(start_time).timestamp()
     return (start_time, date_time, unix_timestamp)
 
+def lbs(ip: str) -> dict:
+    """
+    获取 IP 地址信息
+    :param ip: IP 地址
+    :return: IP 信息字典
+    """
+    country = ''
+    province = ''
+    provinceCode = ''
+    city = ''
+    cityCode = ''
+
+    lbs_service = CONFIG['lbs']['service']
+    lbs_app_key = CONFIG['lbs']['app_key']
+    if all([lbs_service, lbs_app_key]):
+        try:
+            if lbs_service == 'amap':
+                url = 'https://restapi.amap.com/v3/ip'
+                params = {
+                    'ip': ip,
+                    'key': lbs_app_key,
+                }
+                resp = requests.get(url, params=params, timeout=(10, 30))
+                data = resp.json()
+                adcode = data['adcode']
+                if adcode:
+                    country = '中国'
+                    provinceCode = adcode[:2]
+                    province = data['province']
+                    city = data['city']
+                    cityCode = adcode[:4]
+
+            if lbs_service == 'baidu':
+                url = 'https://api.map.baidu.com/location/ip'
+                params = {
+                    'ip': ip,
+                    'ak': lbs_app_key
+                }
+                resp = requests.get(url, params=params,  timeout=(10, 30))
+                data = resp.json()
+                if data['status'] == 0:
+                    address_detail = data['content']['address_detail']
+                    country = '中国'
+                    adcode = address_detail['adcode']
+                    province = address_detail['province']
+                    provinceCode = adcode[:2]
+                    city = address_detail['city']
+                    cityCode = adcode[:4]
+
+            if lbs_service == 'tencent':
+                url = 'https://apis.map.qq.com/ws/location/v1/ip'
+                params = {
+                    'ip': ip,
+                    'key': lbs_app_key,
+                }
+                resp = requests.get(url, params=params,  timeout=(10, 30))
+                data = resp.json()
+                if data['status'] == 0:
+                    content = data['result']['ad_info']
+                    country = content['nation']
+                    if country == '中国':
+                        adcode = str(content['adcode'])
+                        province = content['province']
+                        provinceCode = adcode[:2]
+                        city = content['city']
+                        cityCode = adcode[:4]
+        except:
+            traceback.print_exc()
+    else:
+        try:
+            lbs_service = 'taobao'
+            url = 'https://ip.taobao.com/outGetIpInfo'
+            params = {
+                'ip': ip,
+                'accessKey': 'alibaba-inc'
+            }
+            resp = requests.get(url, params=params, timeout=(10, 30))
+            content = resp.json()
+            data = content['data']
+            country = data['country']
+            country = '' if country == 'XX' else country
+            province = data['region']
+            province = '' if province == 'XX' else province
+            city = data['city']
+            city = '' if city == 'XX' else city
+            if country == '中国':
+                provinceCode = data['region_id'][:2]
+                provinceCode = '' if provinceCode == 'xx' else provinceCode
+                cityCode = data['city_id'][:4]
+                cityCode = '' if cityCode == 'xx' else cityCode
+        except:
+            try:
+                lbs_service = 'pconline'
+                url = 'https://whois.pconline.com.cn/ipJson.jsp'
+                params = {
+                    'ip': ip,
+                    'json': 'true'
+                }
+                resp = requests.get(url, params=params, timeout=(10, 30))
+                data = resp.json()
+                if data['proCode'] == '999999':
+                    country = data['addr'].strip()
+                    country = re.sub(r'(?<=国)\S+', '', country.split(' ')[0])
+                else:
+                    country = '中国'
+                    province = data['pro'].strip()
+                    provinceCode = data['proCode'][:2]
+                    provinceCode = '' if provinceCode == '999999' else provinceCode
+                    city = data['city'].strip()
+                    cityCode = data['cityCode'][:4]
+                    cityCode = '' if cityCode == '999999' else cityCode
+            except:
+                pass
+
+    result = {
+        'country': country,
+        'province': province,
+        'provinceCode': provinceCode,
+        'city': city,
+        'cityCode': cityCode,
+        'lbs_service': lbs_service
+    }
+
+    return result
+
 def queryDivision(name: str, ip: str='') -> tuple:
     """
     查询地区信息
     :param name: 地区名称
     :param ip: IP 地址
-    :return: 地区信息元组, (country, province, city)
+    :return: 地区信息元组
     """
     is_ipv4 = re.fullmatch(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip)
     country, province, city = '', '', ''
@@ -177,62 +302,24 @@ def queryDivision(name: str, ip: str='') -> tuple:
                 if location:
                     country, province, city = location.split(',')
                 elif is_ipv4:
-                    provinceCode = ''
-                    cityCode = ''
-
-                    try:
-                        # 查询淘宝接口
-                        url = 'https://ip.taobao.com/outGetIpInfo'
-                        params = {
-                            'ip': ip,
-                            'accessKey': 'alibaba-inc'
-                        }
-                        resp = requests.get(url, params=params, timeout=(10, 30))
-                        content = resp.json()
-                        data = content['data']
-                        country = data['country']
-                        country = '' if country == 'XX' else country
-                        province = data['region']
-                        province = '' if province == 'XX' else province
-                        city = data['city']
-                        city = '' if city == 'XX' else city
-                        if country == '中国':
-                            provinceCode = data['region_id'][:2]
-                            cityCode = data['city_id'][:4]
-                    except:
-                        try:
-                            # 查询太平洋接口
-                            url = 'https://whois.pconline.com.cn/ipJson.jsp'
-                            params = {
-                                'ip': ip,
-                                'json': 'true'
-                            }
-                            resp = requests.get(url, params=params, timeout=(10, 30))
-                            data = resp.json()
-                            if data['proCode'] == '999999':
-                                country = data['addr'].strip()
-                                country = re.sub(r'(?<=国)\S+', '', country)
-                            else:
-                                country = '中国'
-                                province = data['pro'].strip()
-                                provinceCode = data['proCode'][:2]
-                                city = data['city'].strip()
-                                cityCode = data['cityCode'][:4]
-                        except:
-                            pass
-
-                    if all([provinceCode, cityCode]) and (province not in ['香港', '澳门', '台湾']):
+                    location_info = lbs(ip)
+                    country = location_info['country']
+                    province = location_info['province']
+                    provinceCode = location_info['provinceCode']
+                    city = location_info['city']
+                    cityCode = location_info['cityCode']
+                    if all([provinceCode, cityCode]):
                         # 城市名称规范化
                         try:
                             row = None
-                            if cityCode not in ['xx', '0', '999999']:
-                                q = f'''SELECT name FROM city WHERE code = {cityCode}'''
-                                row = cur.execute(q).fetchone()
-                            elif provinceCode not in ['xx', '0', '999999']:
+                            q = f'''SELECT name FROM city WHERE code = {cityCode}'''
+                            row = cur.execute(q).fetchone()
+                            city = row[0] if row else ''
+                            if not city:
                                 # 有可能是省直辖县级行政区划
                                 q = f'''SELECT name FROM area WHERE name LIKE '%{name}%' AND provinceCode = {provinceCode}'''
                                 row = cur.execute(q).fetchone()
-                            city = row[0] if row else ''
+                                city = row[0] if row else ''
                         except:
                             traceback.print_exc()
                             print(name, ip)
@@ -245,6 +332,7 @@ def queryDivision(name: str, ip: str='') -> tuple:
                             traceback.print_exc()
                             print(name, ip)
 
+    # save to redis
     if all([country, province, city]):
         rd.hset('ip_location', ip, f'{country},{province},{city}')
 
@@ -255,7 +343,7 @@ def parseTrafficSource(source_from_type: str, source_url: str) -> dict:
     解析来源信息
     :param source_from_type: 流量来源类型
     :param source_url: 前向地址
-    :return: 来源信息字典, {referrer, referrer_host, search_engine, search_keyword, traffic_source_type}
+    :return: 来源信息字典
     """
     search_engine = ''
     se_pattern = re.compile(r'(百度自然搜索|百度|Google|搜狗|Yahoo|中国雅虎|搜搜|有道|狗狗搜索|Bing|360搜索|即刻搜索|奇虎搜索|一淘搜索|搜酷|宜搜|UC搜索|好搜|神马搜索|中国搜索|头条|夸克搜索)')
@@ -316,6 +404,12 @@ def parseSLD(host: str) -> str:
     :param host: 域名
     :return: 二级域名或主域名
     """
+    if 'localhost' in host: # localhost
+        return host
+    if re.fullmatch(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', re.sub(r':\d*$', '', host)): # IPv4
+        return host
+    if re.fullmatch(r'^[0-9a-fA-F:]+$', re.sub(r':\d*$', '', host)): # IPv6
+        return host
     ccTLD = ['ac', 'ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', \
             'bi', 'bj', 'bm', 'bn', 'bo', 'br', 'bs', 'bt', 'bw', 'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', \
             'cu', 'cv', 'cw', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'er', 'es', 'et', 'eu', 'fi', 'fj', 'fk', 'fm', 'fo', \
@@ -327,7 +421,7 @@ def parseSLD(host: str) -> str:
             'se', 'sg', 'sh', 'si', 'sk', 'sl', 'sm', 'sn', 'so', 'sr', 'ss', 'st', 'su', 'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', \
             'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'uk', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', \
             'ye', 'yt', 'za', 'zm', 'zw', 'bl', 'bq', 'bv', 'eh', 'gb', 'mf', 'sj', 'um']
-    TLD = ['com', 'net', 'org', 'gov', 'edu']
+    TLD = ['com', 'net', 'org', 'gov', 'edu', 'co']
     terms = host.split('.')
     if (terms[-1] in ccTLD) and (terms[-2] in TLD):
         sld = '.'.join(terms[-3:])
@@ -339,7 +433,7 @@ def parsetUrlPath(url: str) -> tuple:
     """
     解析url路径信息
     :param url: url
-    :return: 路径信息元组, (url_path, url_full_path)
+    :return: 路径信息元组
     """
     try:
         url_path = '/' + re.sub(r'[\?#%&]\S*', '', url.split('/')[3])
@@ -353,7 +447,7 @@ def parsetracking_arams(url: str) -> dict:
     """
     解析 url 中的 tracking 参数信息
     :param url: url
-    :return: tracking 参数信息字典, {utm_source, utm_medium, utm_campaign, utm_term, utm_content, hmsr, hmpl, hmcu, hmkw, hmci, ct_params}
+    :return: tracking 参数信息字典
     """
     query_params = parse_qs(urlparse(url).query, keep_blank_values=True)
     query_params = {k: v[0] for k, v in query_params.items()}
@@ -543,7 +637,7 @@ def parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, ut
         group = 'direct'
     if utm_medium in ['display', 'banner', 'expandable', 'interstitial', 'cpm']:
         group = 'display'
-    if re.search(r'email|e-mail|e_mail|mail|newsletter', utm_source) or re.search(r'email|e-mail|e_mail|mail|newsletter', utm_medium):
+    if (group == 'email') or re.search(r'email|e-mail|e_mail|mail|newsletter', utm_source) or re.search(r'email|e-mail|e_mail|mail|newsletter', utm_medium):
         group = 'email'
     if re.search(r'push$|mobile|notification', utm_medium) or (utm_source == 'firebase'):
         group = 'mobile_push_notifications'

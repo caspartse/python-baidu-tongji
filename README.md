@@ -65,7 +65,9 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
       auth_code: your_auth_code
     ```
 
-4. 根据实际情况，修改 `package/config.yaml` 中的数据库配置，如 Redis：
+4. 根据实际需要，修改 `package/config.yaml` 中的其他配置，如：
+
+    - Redis 配置
 
     ```YAML
     # Redis
@@ -74,6 +76,18 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
       port: 6379
       db: 0
       password: ''
+    ```
+
+   - IP 定位服务配置（默认使用淘宝、太平洋在线的服务）
+
+    ```YAML
+    # LBS, query ip location (optional)
+    # amap: https://lbs.amap.com/api/webservice/guide/api/ipconfig
+    # baidu: https://lbsyun.baidu.com/index.php?title=webapi/ip-api
+    # tencent: https://lbs.qq.com/service/webService/webServiceGuide/webServiceIp
+    lbs:
+      service: '' # if you want to use LBS, set service to 'amap', 'baidu' or 'tencent'
+      app_key: '' # your_app_key of amap or baidu or tencent
     ```
 
 5. 根据实际需要，修改 `package/dimensions.yaml` 中的维度配置，如 `custom_tracking_params` （自定义跟踪参数）, `onsite_search_params` （站内搜索参数）：
