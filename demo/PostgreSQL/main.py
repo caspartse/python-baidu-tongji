@@ -5,7 +5,7 @@ import sys
 import traceback
 from os.path import abspath, dirname, join
 
-import psycopg2
+import psycopg
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
@@ -21,7 +21,7 @@ pg_port = CONFIG['postgresql']['port']
 pg_dbname = CONFIG['postgresql']['dbname']
 pg_username = CONFIG['postgresql']['username']
 pg_password = CONFIG['postgresql']['password']
-conn = psycopg2.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
+conn = psycopg.connect(host=pg_host, port=pg_port, dbname=pg_dbname, user=pg_username, password=pg_password)
 cur = conn.cursor()
 
 site_id = '16847648' # change to your site_id
@@ -97,7 +97,7 @@ if __name__ == '__main__':
             traceback.print_exc()
             conn.rollback()
 
-    # query by visitor_id which "duration" is -10000, which means the visitor is still online
+    # query by visitor_id which "duration" is -10000 (visiting)
     # you could change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time

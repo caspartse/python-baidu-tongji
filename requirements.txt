@@ -1,5 +1,6 @@
 arrow==1.2.3
-orjson==3.8.7
+orjson==3.8.8
+psycopg==3.1.8
 psycopg2==2.9.5
 pymongo==4.3.3
 PyYAML==6.0

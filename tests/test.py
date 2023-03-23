@@ -20,7 +20,7 @@ print(ROOT_PATH)
 
 
 site_id = '16847648' # change to your site_id
-page_size = 100 # change page_size if you want, max is 1000
+page_size = 10 # change page_size if you want, max is 1000
 debug = True # set debug=False if useing in production environment
 
 

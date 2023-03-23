@@ -95,7 +95,7 @@ if __name__ == '__main__':
     kb = Kibana()
     bd = BaiduTongji(debug=debug)
 
-    # query by visitor_id which "duration" is -10000 (means the visitor is still online)
+    # query by visitor_id which "duration" is -10000 (visiting)
     # you could change the order by condition to get the latest data, or change the limit to get more data
     query = '''
         SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
