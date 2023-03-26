@@ -3,9 +3,7 @@
 """"
 run this script every day at 01:00:00
 """
-import os
 import sys
-import traceback
 from os.path import abspath, dirname, join
 
 import psycopg

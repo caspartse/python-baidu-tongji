@@ -1,7 +1,8 @@
-__pycache__/
+*.log
 .DS_Store
-.idea
-.vscode
+.idea/
+.vscode/
+__pycache__/
 reference/
 tests/debug.py
 tests/validation.py

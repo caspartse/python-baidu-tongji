@@ -6,7 +6,6 @@ import sys
 import traceback
 from os.path import abspath, dirname, join
 
-import arrow
 import orjson as json
 import requests
 

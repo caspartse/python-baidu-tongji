@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import codecs
-import os
 import sys
 import traceback
 from os.path import abspath, dirname, join
 
-import arrow
-import orjson as json
 import requests
 
 sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 
 from baidu_tongji import BaiduTongji
-from utils import loadConfig
+from utils import changeToUTC, loadConfig
 
 CONFIG = loadConfig()
 kb_scheme = CONFIG['kibana']['scheme']
@@ -60,12 +56,6 @@ class Kibana(object):
         result = resp.json()
         return result
 
-def changeToUTC(local_time: str, tzinfo: str='Asia/Shanghai') -> str:
-    try:
-        utc_time = arrow.get(local_time, tzinfo=tzinfo).to('UTC').format('YYYY-MM-DD HH:mm:ss')
-        return utc_time
-    except:
-        return local_time
 
 def saveToES(self, entity: dict) -> bool:
     # index_name, doc_id, data
@@ -96,7 +86,7 @@ if __name__ == '__main__':
     bd = BaiduTongji(debug=debug)
 
     # query by visitor_id which "duration" is -10000 (visiting)
-    # you could change the order by condition to get the latest data, or change the limit to get more data
+    # you can change the order by condition to get the latest data, or change the limit to get more data
     query = '''
         SELECT visitor_id, event_id, MIN(receive_time) AS min_receive_time
         FROM events

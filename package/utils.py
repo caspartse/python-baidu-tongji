@@ -272,12 +272,10 @@ def queryDivision(name: str, ip: str='') -> tuple:
     if name in ['北京', '上海', '天津', '重庆']:
         country = '中国'
         province = name + '市'
-        city = province
     # 港澳台
     if name in ['香港', '澳门', '台湾']:
         country = '中国'
         province = name
-        city = province
 
     # 非直辖市、非港澳台
     if province not in ['北京市', '上海市', '天津市', '重庆市', '香港', '澳门', '台湾']:
@@ -331,6 +329,13 @@ def queryDivision(name: str, ip: str='') -> tuple:
                         except:
                             traceback.print_exc()
                             print(name, ip)
+
+    try:
+        province = re.search(r'(香港)|(澳门)|(台湾)', province).group(1)
+    except:
+        pass
+    if province in ['北京市', '上海市', '天津市', '重庆市', '香港', '澳门', '台湾']:
+        city = province
 
     # save to redis
     if all([country, province, city]):
@@ -710,6 +715,20 @@ def parseWXShareFrom(browser_type, referrer_host, url) -> str:
         else:
             share_from = '其他'
     return share_from
+
+def changeToUTC(local_time: str, tzinfo: str='Asia/Shanghai') -> str:
+    """
+    change time zone from local to UTC
+    :param local_time: local time, e.g. 2020-01-01 08:00:00
+    :param tzinfo: local time zone, e.g. Asia/Shanghai
+    :return: UTC time, e.g. 2020-01-01 00:00:00
+    """
+    try:
+        utc_time = arrow.get(local_time, tzinfo=tzinfo).to('UTC').format('YYYY-MM-DD HH:mm:ss')
+        utc_time = '1970-01-01 00:00:01' if utc_time < '1970-01-01 00:00:01' else utc_time
+        return utc_time
+    except:
+        return local_time
 
 
 if __name__ == '__main__':

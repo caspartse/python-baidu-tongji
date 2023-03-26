@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+import logging
 import os
 import sys
 import traceback
@@ -12,6 +13,8 @@ sys.path.insert(0, abspath(join(dirname(__file__), '../../package')))
 from baidu_tongji import BaiduTongji
 from utils import loadConfig, loadDimensions
 
+CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+logging.basicConfig(filename=f'{CURRENT_PATH}/pgmain.log', encoding='utf-8', level=logging.ERROR)
 CONFIG = loadConfig()
 DIMENSIONS = loadDimensions()
 
@@ -63,9 +66,9 @@ def saveToDB(entity: dict) -> bool:
             '''
             cur.execute(q, tuple(obj.values()))
             conn.commit()
-        except:
-            print(f'insert or update {table_name}')
+        except Exception as e:
             traceback.print_exc()
+            logging.error(e, exc_info=True)
             conn.rollback()
 
     return True
@@ -94,11 +97,10 @@ if __name__ == '__main__':
             cur.execute(q)
             conn.commit()
         except:
-            traceback.print_exc()
             conn.rollback()
 
     # query by visitor_id which "duration" is -10000 (visiting)
-    # you could change the order by condition to get the latest data, or change the limit to get more data
+    # you can change the order by condition to get the latest data, or change the limit to get more data
     q = '''
         SELECT visitor_id, MIN(receive_time) AS min_receive_time
         FROM events
@@ -115,8 +117,9 @@ if __name__ == '__main__':
         visitor_id = row[0]
         try:
             result = bd.fetchRealTimeData(site_id, page_size=page_size, visitor_id=visitor_id)
-        except:
+        except Exception as e:
             traceback.print_exc()
+            logging.error(e, exc_info=True)
             continue
         for item in result:
             saveToDB(item)
