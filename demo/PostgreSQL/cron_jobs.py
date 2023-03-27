@@ -49,7 +49,7 @@ if __name__ == '__main__':
     q = '''
         UPDATE sessions s
         SET duration = (
-            SELECT SUM(duration)
+            SELECT COALESCE(SUM(duration), -20000)
             FROM events
             WHERE session_id = s.session_id
             AND duration > 0

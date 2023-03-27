@@ -331,7 +331,7 @@ def queryDivision(name: str, ip: str='') -> tuple:
                             print(name, ip)
 
     try:
-        province = re.search(r'(香港)|(澳门)|(台湾)', province).group(1)
+        province = re.findall(r'(香港|澳门|台湾)', province).group(1)
     except:
         pass
     if province in ['北京市', '上海市', '天津市', '重庆市', '香港', '澳门', '台湾']:
