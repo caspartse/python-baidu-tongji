@@ -612,7 +612,7 @@ def querySourceCategory(referrer_host: str) -> str:
                     category = source_category[0]
     return category
 
-def parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, utm_medium, utm_campaign) -> str:
+def parseEnhancedTrafficGroup(traffic_source_type: str, referrer_host: str, utm_source: str, utm_medium: str, utm_campaign: str) -> str:
     """
     解析增强型流量渠道分组
     :param traffic_source_type: 流量来源类型
@@ -647,7 +647,9 @@ def parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, ut
     if re.search(r'push$|mobile|notification', utm_medium) or (utm_source == 'firebase'):
         group = 'mobile_push_notifications'
     if not is_paid:
-        if (category == 'search') or (traffic_source_type == '搜索引擎'):
+        if ('baidu.com' in referrer_host) and (traffic_source_type == '外部链接'):
+            group = 'referral'
+        elif (category == 'search') or (traffic_source_type == '搜索引擎'):
             group = 'organic_search'
         elif (category == 'shopping' or re.search(r'^(.*(([^a-df-z]|^)shop|shopping).*)$', utm_campaign)):
             group = 'organic_shopping'
@@ -694,7 +696,42 @@ def parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, ut
 
     return group
 
-def parseWXShareFrom(browser_type, referrer_host, url) -> str:
+def querySearchEngine(traffic_source: str, enhanced_traffic_group: str, referrer_host: str) -> str:
+    """
+    查询搜索引擎
+    :param traffic_source: 流量来源类型
+    :param enhanced_traffic_group: 增强流量渠道分组
+    :param referrer_host: 前向域名
+    :return: 搜索引擎名称
+    """
+    search_engine = traffic_source['search_engine']
+    if (not search_engine) and (enhanced_traffic_group == 'organic_search'):
+        referrer_host = referrer_host.lower()
+        if 'google' in referrer_host:
+            search_engine = 'Google'
+        elif 'bing' in referrer_host:
+            search_engine = 'Bing'
+        elif 'yahoo' in referrer_host:
+            search_engine = 'Yahoo'
+        elif 'yandex' in referrer_host:
+            search_engine = 'Yandex'
+        elif 'duckduckgo' in referrer_host:
+            search_engine = 'DuckDuckGo'
+        elif 'sogou' in referrer_host:
+            search_engine = '搜狗'
+        elif 'so.com' in referrer_host:
+            search_engine = '360搜索'
+        elif 'quark.sm.cn' in referrer_host:
+            search_engine = '夸克搜索'
+        elif 'sm.cn' in referrer_host:
+            search_engine = '神马搜索'
+        elif 'so.toutiao.com' in referrer_host:
+            search_engine = '头条'
+        else:
+            search_engine = 'referrer_host'
+    return search_engine
+
+def parseWXShareFrom(browser_type: str, referrer_host: str, url: str) -> str:
     """
     解析微信分享来源
     :param browser_type: 浏览器类型

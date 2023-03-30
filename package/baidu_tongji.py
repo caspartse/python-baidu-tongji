@@ -173,7 +173,6 @@ class BaiduTongji(object):
             referrer = traffic_source['referrer']
             referrer_host = traffic_source['referrer_host']
             referrer_host_sld = parseSLD(referrer_host) # Second-level domain, e.g. book.douban.com -> douban.com, www.google.com.hk -> google.com.hk
-            search_engine = traffic_source['search_engine']
             access_host = urlparse(access_page).netloc
             access_path, access_full_path = parsetUrlPath(access_page)
             access_page_query = urlparse(access_page).query
@@ -232,6 +231,7 @@ class BaiduTongji(object):
             visitor_type = d['visitorType']
             visitor_type = 1 if visitor_type == '老访客' else 0
             enhanced_traffic_group = parseEnhancedTrafficGroup(traffic_source_type, referrer_host, utm_source, utm_medium, utm_campaign)
+            search_engine = querySearchEngine(traffic_source, enhanced_traffic_group, referrer_host)
             wx_share_from = parseWXShareFrom(browser_type, referrer_host, access_page)
 
             session_id = 's_' + md5(f'{visitor_id}_{int(unix_timestamp)}_{access_page}'.encode('utf-8')).hexdigest().lower()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """"
-run this script every day at 01:00:00
+This script is designed to fix data errors and aggregate data in PostgreSQL.
 """
 import sys
 from os.path import abspath, dirname, join

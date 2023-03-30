@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+""""
+This script is used to insert data from PostgreSQL to Elasticsearch.
+"""
 import sys
 import traceback
 from os.path import abspath, dirname, join
@@ -90,7 +93,7 @@ if __name__ == '__main__':
         q = f'''
             SELECT {','.join(cloumns.keys())}
             FROM {index_name}
-            WHERE _updated_at >= (NOW() - INTERVAL '20 MINUTES') -- update the data in the last 20 minutes, you can change it to your own time range
+            WHERE _updated_at >= (NOW() - INTERVAL '30 MINUTES') -- update the data in the last 30 minutes, you can change it to your own time range
         '''
         cur.execute(q)
         rows = cur.fetchall()

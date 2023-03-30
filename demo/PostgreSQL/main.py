@@ -14,7 +14,7 @@ from baidu_tongji import BaiduTongji
 from utils import loadConfig, loadDimensions
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-logging.basicConfig(filename=f'{CURRENT_PATH}/pgmain.log', encoding='utf-8', level=logging.ERROR)
+logging.basicConfig(filename=f'{CURRENT_PATH}/pgmain.log', encoding='utf-8', level=logging.ERROR, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 CONFIG = loadConfig()
 DIMENSIONS = loadDimensions()
 

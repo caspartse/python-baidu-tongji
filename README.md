@@ -40,7 +40,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
     ```
 
 
-## 📦 安装使用
+## 🚀 安装使用
 
 1. 克隆本仓库。
 
@@ -108,7 +108,7 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
    每次调用后，原始数据会被临时存储到 `package/data` 目录下，文件名为 `{site_id}_raw_data.json` 。
 
 
-## 🐣 Demo 介绍
+## 💡 Demo 介绍
 
 ### PostgreSQL
 
@@ -143,11 +143,6 @@ A modern-style implementation of Baidu Analytics (Tongji) in Python.
 - [神策分析 - 预置事件与预置属性](https://manual.sensorsdata.cn/sa/latest/tech_sdk_all_preset_properties-89620676.html)
 - [GA4 - Automatically collected events](https://support.google.com/analytics/answer/9234069?hl=en&ref_topic=13367566)
 - [GA4 - Default channel group](https://support.google.com/analytics/answer/9756891?hl=en&ref_topic=11151952)
-
-
-## 📝 TODO
-
-- [ ] 实现基于访客数据的常用指标
 
 
 ## ❤️ Thanks
